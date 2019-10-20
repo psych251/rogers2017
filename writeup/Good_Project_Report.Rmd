@@ -1,0 +1,182 @@
+---
+title: "Replication of Study 3 in Artful Paltering: The Risks and Rewards of Using Truthful Statements to Mislead Others by Rogers, Zeckhauser, Gino, Norton, & Schweitzer (2017, Journal of Personality and Social Psychology)"
+author: "Kayla Good (kagood@stanford.edu)"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: false
+---
+
+<!-- Replication reports should all use this template to standardize reporting across projects.  These reports will be public supplementary materials that accompany the summary report(s) of the aggregate results. -->
+
+## Introduction
+
+### Links
+
+Github Project Repository: https://github.com/psych251/rogers2017
+
+Original paper: https://github.com/psych251/rogers2017/blob/master/original_paper/Rogers_et_al_2017.pdf
+
+Please note that parts of the report are not currently written in past tense, as some details are subject to change (e.g., planned sample size). However, once these details are finalized, I will go back through and change the tense accordingly.
+
+### Justification
+
+In my research, I am primarily interested in exploring how different linguistic devices and forms of conversational implicature influence children's and adults' interpretations and evaluations of messages in a variety of domains, including the domains of achievement, preventative health, and nutrition. Recently, I developed a specific interest in how adults and children evaluate paltering, or the act of making statements that, while technically true, lead others to draw false conclusions. In the present replication project, I will replicate Study 3 of Rogers et al. (2017), which aimed to compare adults' evaluations of the ethicality of paltering with their evaluations of honesty and another form of deception (lying by commission, or making false statements). 
+
+### Study Description
+
+In Study 3, Rogers et al. (2017) asked adults to imagine that they were engaged in a negotiation and that their negotiation partner had either been honest, paltered, or lied by commission. I aimed to replicate the finding that adults evaluate partners who palter or lie by commission as equally unethical and untrustworthy (compared to honest partners) and report an equally low likelihood of entering into a subsequent negotiation with either partner (again, compared to honest partners, for whom they report a higher likelihood of agreeing to another negotiation).
+
+### Challenges
+
+Because I am relatively new to R and Github, I think that one of the primary challenges will involve my gaining the required knowledge and skills necessary for handling data and carrying out data analyses. However, I am confident that, with the skills we are learning in class as well as my having a strong background in STATA (and perhaps more importantly, experience with using Google to troubleshoot issues in STATA), I think this will be an appropriately difficult challenge. From a data collection standpoint, I think it will be challenging to ensure that the sample size is not affected substantially by exclusions due to failed attention checks; however, by being thoughtful about survey design and crafting a clear MTurk HIT description, I think that this issue can be minimized. Finally, I think it might be a slight challenge to stay within budget, given the relatively high compensation rate used in the original study. However, I am going to try my best to use the same payment ($0.50 per participant) in order to maintain as much consistency with the original study as possible. 
+
+## Methods
+
+### Power Analysis
+
+A more precise planned sample size will be computed via power analysis. The original paper does not report effect sizes, which will be necessary for determining the sample size needed for achieving at least 80% power. Once effect sizes have been computed (utilizing group means reported in the original paper), I will compute the sample sizes needed to achieve 80%, 90%, or 95% power, respectively. 
+
+At a minimum, I will plan to recruit enough participants to achieve 80% power; however, if running a sample size large enough to achieve 90% or 95% power is feasible (given budget constraints), I will consider doing so. Furthermore, my choice of sample size will depend, in part, on the power achieved in the original study (which I will also calculate once I have the computed effect sizes). I will aim to reach the same level of power that was achieved in the original study (unless the study was overpowered, in which case, I will aim for between 80% and 95% power).
+
+### Planned Sample
+
+Please note that the planned sample size is subject to change depending upon the results of a power analysis. For now, I will plan to recruit the same amount of participants that were recruited in the original study.
+
+The original study was carried out with 160 participants (who were paid $0.50 each) on Amazon Mechanical Turk. Participants will be recruited in the same manner with a sample size calculated via a power analysis. Only adults (ages 18 and older) living in the United States will be eligible to participate. 
+
+In the original study, participants who did not pass two initial attention check items (which comprised the first part of the survey and occurred prior to condition assignment) were directed to the end of the survey (it is unclear whether they received payment). Because class policy specifies that payment of participants is not contingent on their performance or completion of all survey questions, I plan to pay participants who begin the survey but fail the initial attention check items; however, consistent with the original study, I will redirect these participants to the end of the survey immediately after attention check failure. Therefore, they will not be assigned to condition and will not be included in the final sample. (In the original study, while 160 were recruited, 5 failed the attention check, leaving a total of 155 participants.)
+
+I expect that the demographics of the sample recruited for replication will be extremely similar to that of the sample recruited for the original study (with perhaps some differences due to chance). The original sample was 39% female and had a mean age of 30 years (SD = 8.96 years).
+
+### Materials
+
+Participants who passed two attention check items (described in the "Procedures" section below) were instructed to consider the following scenario, which did not differ across conditions:
+
+> "You are the Executive Vice President of Pearl Investments, a holding company that specializes in real estate investments. You are in charge of negotiating the sale of a large piece of property located in Hamilton, a mid-sized town at the outskirts of a large metropolitan area.
+>
+> "How much a potential buyer will pay for the Hamilton property depends on a number of factors, including the planned use for the property. For example, your experts have estimated that if the land were developed for commercial use (e.g., a set of office buildings), the land might be worth 1.5 to 2 times as much as if it were developed for residential use (e.g., apartment buildings). 
+>
+>"While property value would be maximized if the land were developed for commercial use, there is probably no interest for the property among commercial developers. The reason is that the zoning laws in Hamilton do not allow for commercial development of the property. While there has been some talk among local politicians of allowing commercial development in Hamilton over the last few years, no action has been taken. As a result, Hamilton has fallen off the radar for commercial developers. 
+>
+>"Estate One, a premier real estate company in the region, has just sent word that they are interested in the Hamilton property. Your best estimate is that Estate One will develop the property for the construction of luxury condominiums (that is what they do with virtually all of their properties). On the call, the CEO of Estate One sounded extremely enthusiastic about the prospect of purchasing the Hamilton property.
+>
+>"You have decided that you will meet with the CEO of Estate One and try to negotiate a deal for the sale of the Hamilton property. 
+>
+>"Here is what you know about Estate One: They are a mid-sized real estate company and they invest primarily in residential properties. The CEO of Estate One has been with the company since its founding twenty years ago and is known to have an eye for opportunity and for maximizing value potential in every deal. The CEO is also known to be extremely well connected politically, and is linked to knowledge brokers at all levels of state and local government. Estate One is not a competitor of yours."
+
+Following this scenario, participants were presented with information about the negotiation, which differed by condition.
+
+In the paltering condition, participants read:
+
+> "During your meeting with Estate One to negotiate, you asked the following question:  Do you plan to develop the property for residential use?  You received the following answer:  'I have only ever developed properties for residential use before.'"
+
+In the lying by commission condition, participants read:
+
+> "During your meeting with Estate One to negotiate, you asked the following question:  Do you plan to develop the property for residential use?  You received the following answer:  'Yes, I intend to develop the property for residential use.'"
+
+In the honesty condition, participants read:
+
+> "During your meeting with Estate One to negotiate, you asked the following question:  Do you plan to develop the property for residential use?  You received the following answer:  'No, I intend to develop the property for commercial use.'"
+
+In all conditions, participants were then presented with the following information:
+
+> "You later discovered that, at the time of negotiations, the buyer knew that the property would soon be zoned for commercial development, thus making the value of the property higher."
+
+### Procedure	
+
+As in the original study, participants were directed to a Qualtrics survey, where they were first shown two attention check items. The first item consisted of a photo of an object that had to be correctly identified; this prevented bots from completing the survey. The second item consisted of instructions (quoted below) that participants had to read:
+
+> "Recent research on decision making shows that choices are affected by context. Differences in how people feel, their previous knowledge and experience, and their environment can affect choices. To help us understand how people make decisions, we are interested in information about you. Specifically, we are interested in whether you actually take the time to read the directions; if not, some results may not tell us very much about decision making in the real world. To show that you have read the instructions, please ignore the question below about how you are feeling and instead check only the "none of the above" option as your answer. Thank you very much."
+
+Following these instructions (but prior to condition assignment), participants were provided with a list of several emotions and had to select the last option ("None of the above") in order to be included in the rest of the survey. Otherwise, they were directed to the end of the survey and were given instructions on how to receive payment.
+
+Following the attention check items, participants were given the following instructions:
+
+> "Your task in this study is to read a short scenario. You will be asked to imagine yourself in the situation described and then answer a few questions about it. Please read the scenario as carefully as possible."
+
+They were then presented with the main scenario quoted in the "Materials" section above.
+This scenario asked participants to imagine that they have to sell a large piece of real estate property, which will vary in value depending on whether the buyer intends to develop it for commercial or residential purposes. They were then told that they would be negotiating with a potential buyer. Participants were then randomly assigned to one of three conditions, in which the buyer is either honest about their intention for the property, palters, or lies by commission (see "Materials" above for the exact wording used in each condition).
+
+After learning that the buyer was either honest or deceptive, participants were then asked to provide ratings (on 7-point Likert scales) of the buyer's ethicality. Specifically, they were asked, "To what extent do you think the answer the Buyer gave you was..." and then had to rate (on three separate scales) the extent to which they found the Buyer's answer was "unethical," "dishonest," and "immoral." Participants were also asked, "To what extent do you think the Buyer is..." and had to rate the extent to which they found the Buyer to be "unethical," "dishonest," and "immoral." 
+
+Participants were then asked to rate the extent to which they found the Buyer's answer "creative," "innovative," or "original." 
+
+Participants were also asked to rate the likelihood of their engaging in a future negotiation with the Buyer, which they rated on a 7-point Likert scale ranging from "Not likely at all" (1) to "Very likely" (7). Finally, they were asked to imagine that they had to negotiate with the Buyer again and were asked to rate their trust in the Buyer on a 7-point Likert scale ranging from "Not at all" (1) to "Very much" (7).
+
+Following the primary dependent measures, participants were asked for demographic information, including their gender and age.
+
+### Analysis Plan
+
+#### Exclusion Criteria
+
+Per the original study, participants will be excluded if they fail the initial two attention check items. There are no other exclusion criteria.
+
+#### Key Analysis of Interest
+
+The key analysis of interest is an ordinal logistic regression, which will be used to assess the effect of condition (paltering, lying by commission, or honesty) on participants' ratings of the ethicality of the Buyer's answer, the ethicality of the Buyer themselves, their trust in the Buyer, and likelihood of engaging in a future negotiation with the Buyer. (Please note that "ethicality" ratings included in these analyses will be an average of participants' ratings of the extent to which they believe the Buyer [or the Buyer's answer] is "unethical," "dishonest," and "immoral". This procedure was used in the original study, which referred to these averages as "ethicality indexes".)
+
+An ordinal logistic regression was chosen due to its being the most appropriate form of regression for ordinal data, which is what is being collected in this study via Likert scale ratings. This analysis, conducted for each ethicality index, the trust measure, as well as the likelihood of future negotiation measure, will allow me to determine the extent to which participants' ratings for each of these measures differed depending on whether the Buyer was honest, paltered, or lied by commission.
+
+### Differences from Original Study
+
+There will be no forseeable differences in the sample, with the exception of those due to chance, as I will be using the same recruitment pool utilized by the original authors (i.e., MTurk workers). The survey will be conducted via the same survey platform used in the original study (Qualtrics). 
+
+In addition, I will not collect demographic data on ethnicity, student status, and whether English is their first language. While these questions were asked of participants in the original study, the authors reported in their paper that these were not analyzed. Therefore, in the interest of keeping the survey as brief as possible, I chose to exclude these measures from the replication. I do not anticipate that this will affect the results of the replication, as these measures came at the end of the survey and would therefore have not had an effect on participants' responses to the key DVs of interest.
+
+In addition, while participants will be  asked to rate the extent to which they found the Buyer's answer "creative," "innovative," or "original," the effect of condition on these ratings will not be analyzed. The original paper did not report analyses on these ratings; however, I chose to include them in the procedure because they preceded key measures assessing trust and likelihood of negotiating with the same Buyer again. It is possible that having to consider aspects of the Buyer's answer, such as its "creativity," may have influenced responses on these other measures in the original study. Therefore, I decided to retain the measures in the survey (even though the results will not be analyzed) in order to maintain a faithful replication.
+
+### Methods Addendum (Post Data Collection)
+
+<!-- You can comment this section out prior to final report with data collection. -->
+
+#### Actual Sample
+<!-- Sample size, demographics, data exclusions based on rules spelled out in analysis plan -->
+
+#### Differences from pre-data collection methods plan
+<!-- Any differences from what was described as the original plan, or “none”. --> 
+
+
+## Results
+
+
+### Data preparation
+
+Data preparation following the analysis plan. 
+
+Participants' ratings of the extent to which the Buyer's answer, as well as the Buyer themselves, was "unethical," "dishonest," and "immoral" will be averaged to create two "ethicality indexes." Participants' ratings of how "creative," "innovative," and "original" the Buyer's answer was will be excluded. 
+	
+```{r include=F}
+###Data Preparation
+
+####Load Relevant Libraries and Functions
+
+####Import data
+
+#### Data exclusion / filtering
+
+#### Prepare data for analysis - create columns etc.
+```
+
+### Confirmatory analysis
+
+The analyses as specified in the analysis plan. Ordinal logistic regressions will be conducted in order to determine the effect of condition (if any) on participants' ratings of the Buyer's ethicality, their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.
+
+*Side-by-side graph with original graph is ideal here*
+
+### Exploratory analyses
+
+Any follow-up analyses desired (not required).  
+
+## Discussion
+
+### Summary of Replication Attempt
+
+Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
+
+### Commentary
+
+Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
