@@ -3,7 +3,7 @@ title: "Replication of Study 3 in Artful Paltering: The Risks and Rewards of Usi
 author: "Kayla Good (kagood@stanford.edu)"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
-  html_document:
+  html_document: 
     toc: yes
     toc_depth: 3
     toc_float:
@@ -40,13 +40,13 @@ Because I am relatively new to R and Github, I think that one of the primary cha
 
 ### Power Analysis
 
-A more precise planned sample size will be computed via power analysis. The original paper does not report effect sizes, which will be necessary for determining the sample size needed for achieving at least 80% power. Once effect sizes have been computed (utilizing group means reported in the original paper), I will compute the sample sizes needed to achieve 80%, 90%, or 95% power, respectively. 
+Since effect sizes were not reported in the original paper, I calcuated effect sizes using the group means and standard deviations reported in Table 2 (Rogers et al., 2017). Since the standard deviation was not reported for the mean rating of the unethicality of the Buyer's answer in the Honest condition, I calcuated the effect size of each condition contrast (Honest vs. Palter, Honest vs. Lie by Commission, and Palter vs. Lie by Commission) for the other three measures (rating of the unethicality of the Buyer, trust in the Buyer, and likelihood of future negotiation). Most of the calculated effect sizes were in the medium range (Cohen's d = ~0.5 for each).
 
-At a minimum, I will plan to recruit enough participants to achieve 80% power; however, if running a sample size large enough to achieve 90% or 95% power is feasible (given budget constraints), I will consider doing so. Furthermore, my choice of sample size will depend, in part, on the power achieved in the original study (which I will also calculate once I have the computed effect sizes). I will aim to reach the same level of power that was achieved in the original study (unless the study was overpowered, in which case, I will aim for between 80% and 95% power).
+Using Cohen's d = 0.5, the sample size needed to achieve 80% power was calculated via G*Power. The calculated sample size was 159 participants. Since this is incredibly close to the sample size used in the original study (where N = 160), the goal for the present replication will be to also recruit 160 participants. (While additional participants could be recruited in order to achieve greater power, this is not feasible within the budget constraints of the present project and is not necessary, given that a similar power level was achieved by the original study.)
 
 ### Planned Sample
 
-The original study was carried out with 160 participants (who were paid $0.50 each) on Amazon Mechanical Turk. Participants will be recruited in the same manner with a sample size calculated via a power analysis. Only adults (ages 18 and older) living in the United States will be eligible to participate. 
+The original study was carried out with 160 participants (who were paid $0.50 each) on Amazon Mechanical Turk. Participants (N = 160, as determined by a power analysis) will be recruited in the same manner. Only adults (ages 18 and older) living in the United States will be eligible to participate. 
 
 In the original study, participants who did not pass two initial attention check items (which comprised the first part of the survey and occurred prior to condition assignment) were directed to the end of the survey (it is unclear whether they received payment). Because class policy specifies that payment of participants is not contingent on their performance or completion of all survey questions, I plan to pay participants who begin the survey but fail the initial attention check items; however, consistent with the original study, I will redirect these participants to the end of the survey immediately after attention check failure. Therefore, they will not be assigned to condition and will not be included in the final sample. (In the original study, while 160 were recruited, 5 failed the attention check, leaving a total of 155 participants.)
 
@@ -150,8 +150,10 @@ In addition, while participants will be  asked to rate the extent to which they 
 Data preparation following the analysis plan. 
 
 Participants' ratings of the extent to which the Buyer's answer, as well as the Buyer themselves, was "unethical," "dishonest," and "immoral" will be averaged to create two "ethicality indexes." Participants' ratings of how "creative," "innovative," and "original" the Buyer's answer was will not be included in analyses.
+
+Please note that I have not included the data preparation code in the report. This code can be found in the Project Report R Markdown file in the 'rogers2017' folder on GitHub.
 	
-```{r include=FALSE}
+```{r include=FALSE, eval=TRUE}
 ### Data Preparation
 
 #### Load Relevant Libraries and Functions
@@ -244,16 +246,23 @@ buyer_ethicality_lm_data <- data_with_buyer_unethicality_index %>%
 
 ans_ethicality_lm_data <- data_with_ans_unethicality_index %>% 
   filter(Ans_Unethical_Question == 1)
-
 ```
 
 ### Confirmatory analysis
 
 The analyses as specified in the analysis plan. Simple linear regressions will be conducted in order to determine the effect of condition (if any) on participants' ratings of the Buyer's ethicality, their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.
 
-```{r, include = FALSE}
+Please note that the confirmatory analysis code has not been included in this report, but can be found in the code in the Project Report R Markdown file in the 'rogers2017' folder on GitHub.
 
-# Buyer Ethicality - with Lie as reference group
+Below are simple linear regression models, which examine the relationship between condition and each of the primary DVs. I have used the 'lm.beta' package to obtain standardized regression coefficients, which were reported in the original paper. I have included three regression models per DV, with each of the three models having a different condition as the reference (or comparison) group. This was necessary in order to examine all possible contrasts between conditions.
+
+#### Buyer Ethicality Ratings
+
+Here is a summary of the effect of condition on ratings of the Buyer's ethicality, with the "Lie" condition as the reference group:
+
+```{r, echo=FALSE, eval=TRUE}
+
+#  Buyer Ethicality - with Lie as reference group
 
 buyer_ethicality_lm_data$Condition <- relevel(buyer_ethicality_lm_data$Condition, ref = "Lie") # changes reference group to Lie condition
 
@@ -263,12 +272,13 @@ buyer_unethicality_model_LieRef_nonstandardized <- summary(buyer_unethicality_mo
 
 buyer_unethicality_model_LieRef_standardized <- summary(lm.beta(buyer_unethicality_model_LieRef)) # summary of linear regression described above with standardized beta coefficients
 
-buyer_unethicality_model_LieRef_standardized
-
+print(buyer_unethicality_model_LieRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Buyer Ethicality - with Honest as reference group
+Here is a summary of the effect of condition on ratings of the Buyer's ethicality, with the "Honest" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Buyer Ethicality - with Honest as reference group
 
 buyer_ethicality_lm_data$Condition <- relevel(buyer_ethicality_lm_data$Condition, ref = "Honest") # changes reference group to Honest condition
 
@@ -278,11 +288,13 @@ buyer_unethicality_model_HonestRef_nonstandardized <- summary(buyer_unethicality
 
 buyer_unethicality_model_HonestRef_standardized <- summary(lm.beta(buyer_unethicality_model_HonestRef)) # summary of linear regression described above with standardized beta coefficients
 
-buyer_unethicality_model_HonestRef_standardized
+print(buyer_unethicality_model_HonestRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Buyer Ethicality - with Palter as reference group
+Here is a summary of the effect of condition on ratings of the Buyer's ethicality, with the "Palter" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Buyer Ethicality - with Palter as reference group
 
 buyer_ethicality_lm_data$Condition <- relevel(buyer_ethicality_lm_data$Condition, ref = "Palter") # changes reference group to Palter condition
 
@@ -292,11 +304,15 @@ buyer_unethicality_model_PalterRef_nonstandardized <- summary(buyer_unethicality
 
 buyer_unethicality_model_PalterRef_standardized <- summary(lm.beta(buyer_unethicality_model_PalterRef)) # summary of linear regression described above with standardized beta coefficients
 
-buyer_unethicality_model_PalterRef_standardized
+print(buyer_unethicality_model_PalterRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Ethicality of Buyer's Answer - Lie as reference group
+#### Ratings of the Ethicality of the Buyer's Answer
+
+Here is a summary of the effect of condition on ratings the ethicality of the Buyer's answer, with the "Lie" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Ethicality of Buyer's Answer - Lie as reference group
 
 ans_ethicality_lm_data$Condition <- relevel(ans_ethicality_lm_data$Condition, ref = "Lie") # changes reference group to Lie condition
 
@@ -306,11 +322,13 @@ ans_unethicality_model_LieRef_nonstandardized <- summary(ans_unethicality_model_
 
 ans_unethicality_model_LieRef_standardized <- summary(lm.beta(ans_unethicality_model_LieRef)) # summary of linear regression described above with standardized beta coefficients
 
-ans_unethicality_model_LieRef_standardized
+print(ans_unethicality_model_LieRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Ethicality of Buyer's Answer - Honest as reference group
+Here is a summary of the effect of condition on ratings the ethicality of the Buyer's answer, with the "Honest" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Ethicality of Buyer's Answer - Honest as reference group
 
 ans_ethicality_lm_data$Condition <- relevel(ans_ethicality_lm_data$Condition, ref = "Honest") # changes reference group to Honest condition
 
@@ -320,11 +338,13 @@ ans_unethicality_model_HonestRef_nonstandardized <- summary(ans_unethicality_mod
 
 ans_unethicality_model_HonestRef_standardized <- summary(lm.beta(ans_unethicality_model_HonestRef)) # summary of linear regression described above with standardized beta coefficients
 
-ans_unethicality_model_HonestRef_standardized
+print(ans_unethicality_model_HonestRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Ethicality of Buyer's Answer - Palter as reference group
+Here is a summary of the effect of condition on ratings the ethicality of the Buyer's answer, with the "Palter" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Ethicality of Buyer's Answer - Palter as reference group
 
 ans_ethicality_lm_data$Condition <- relevel(ans_ethicality_lm_data$Condition, ref = "Palter") # changes reference group to Palter condition
 
@@ -334,11 +354,15 @@ ans_unethicality_model_PalterRef_nonstandardized <- summary(ans_unethicality_mod
 
 ans_unethicality_model_PalterRef_standardized <- summary(lm.beta(ans_unethicality_model_PalterRef)) # summary of linear regression described above with standardized beta coefficients
 
-ans_unethicality_model_PalterRef_standardized
+print(ans_unethicality_model_PalterRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Trust in Buyer - with Lie as reference group
+#### Ratings of Trust in Buyer
+
+Here is a summary of the effect of condition on ratings of trust in the Buyer, with the "Lie" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Trust in Buyer - with Lie as reference group
 
 trust_mean_data$Condition <- relevel(trust_mean_data$Condition, ref = "Lie") # changes reference group to Lie condition
 
@@ -348,11 +372,13 @@ BuyerTrust_model_LieRef_nonstandardized <- summary(BuyerTrust_model_LieRef) # su
 
 BuyerTrust_model_LieRef_standardized <- summary(lm.beta(BuyerTrust_model_LieRef)) # summary of linear regression described above with standardized beta coefficients
 
-BuyerTrust_model_LieRef_standardized
+print(BuyerTrust_model_LieRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Trust in Buyer - with Honest as reference group
+Here is a summary of the effect of condition on ratings of trust in the Buyer, with the "Honest" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Trust in Buyer - with Honest as reference group
 
 trust_mean_data$Condition <- relevel(trust_mean_data$Condition, ref = "Honest") # changes reference group to Honest condition
 
@@ -362,11 +388,13 @@ BuyerTrust_model_HonestRef_nonstandardized <- summary(BuyerTrust_model_HonestRef
 
 BuyerTrust_model_HonestRef_standardized <- summary(lm.beta(BuyerTrust_model_HonestRef)) # summary of linear regression described above with standardized beta coefficients
 
-BuyerTrust_model_HonestRef_standardized 
+print(BuyerTrust_model_HonestRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Trust in Buyer - with Palter as reference group
+Here is a summary of the effect of condition on ratings of trust in the Buyer, with the "Palter" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Trust in Buyer - with Palter as reference group
 
 trust_mean_data$Condition <- relevel(trust_mean_data$Condition, ref = "Palter") # changes reference group to Honest condition
 
@@ -376,11 +404,15 @@ BuyerTrust_model_PalterRef_nonstandardized <- summary(BuyerTrust_model_PalterRef
 
 BuyerTrust_model_PalterRef_standardized <- summary(lm.beta(BuyerTrust_model_PalterRef)) # summary of linear regression described above with standardized beta coefficients
 
-BuyerTrust_model_PalterRef_standardized 
+print(BuyerTrust_model_PalterRef_standardized)
 ```
 
-```{r, include=FALSE}
-# Future Negotiation - with Lie as reference group
+#### Ratings of Likelihood of Engaging in Future Negotiation with Buyer
+
+Here is a summary of the effect of condition on participants' ratings of their likelihood of engaging in a future negotiation with the Buyer, with the "Lie" condition as the reference group:
+
+```{r, echo=FALSE}
+#  Future Negotiation - with Lie as reference group
 
 future_negotiations_mean_data$Condition <- relevel(future_negotiations_mean_data$Condition, ref = "Lie") # changes reference group to Lie condition
 
@@ -390,10 +422,12 @@ Future_Negotiation_model_LieRef_nonstandardized <- summary(Future_Negotiation_mo
 
 Future_Negotiation_model_LieRef_standardized <- summary(lm.beta(Future_Negotiation_model_LieRef)) # summary of linear regression described above with standardized beta coefficients
 
-Future_Negotiation_model_LieRef_standardized 
+print(Future_Negotiation_model_LieRef_standardized)
 ```
 
-```{r, include=FALSE}
+Here is a summary of the effect of condition on participants' ratings of their likelihood of engaging in a future negotiation with the Buyer, with the "Honest" condition as the reference group:
+
+```{r, echo=FALSE}
 # Future Negotiation - with Honest as reference group
 
 future_negotiations_mean_data$Condition <- relevel(future_negotiations_mean_data$Condition, ref = "Honest") # changes reference group to Honest condition
@@ -404,10 +438,13 @@ Future_Negotiation_model_HonestRef_nonstandardized <- summary(Future_Negotiation
 
 Future_Negotiation_model_HonestRef_standardized <- summary(lm.beta(Future_Negotiation_model_HonestRef)) # summary of linear regression described above with standardized beta coefficients
 
-Future_Negotiation_model_HonestRef_standardized 
+print(Future_Negotiation_model_HonestRef_standardized)
 ```
 
-```{r, include=FALSE}
+Here is a summary of the effect of condition on participants' ratings of their likelihood of engaging in a future negotiation with the Buyer, with the "Palter" condition as the reference group:
+
+```{r, echo=FALSE}
+
 # Future Negotiation - with Palter as reference group
 
 future_negotiations_mean_data$Condition <- relevel(future_negotiations_mean_data$Condition, ref = "Palter") # changes reference group to Palter condition
@@ -418,7 +455,7 @@ Future_Negotiation_model_PalterRef_nonstandardized <- summary(Future_Negotiation
 
 Future_Negotiation_model_PalterRef_standardized <- summary(lm.beta(Future_Negotiation_model_PalterRef)) # summary of linear regression described above with standardized beta coefficients
 
-Future_Negotiation_model_PalterRef_standardized
+print(Future_Negotiation_model_PalterRef_standardized)
 ```
 
 ```{r, include=FALSE}
@@ -475,7 +512,7 @@ mydata_FutureNegotiation_plot <- ggplot(FutureNegotiation_means, aes(x=Condition
 
 ```{r, include=FALSE}
 
-# plots based on data from original study (taken from means and SDs reported in Table 3 of Rogers et al., 2017)
+# plots based on data from original study (taken from means and SDs reported in Table 2 of Rogers et al., 2017)
 
 originaldata_buyer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condition, y=Buyer_Unethicality_Mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
@@ -498,27 +535,45 @@ originaldata_FutureNegotiation_plot <- ggplot(original_paper_data, aes(x=Conditi
   geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SD, ymax=FutureNegotiation_mean + FutureNegotiation_SD), width = .2, position = position_dodge(.9))  # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
 ```
 
-```{r, include=FALSE}
-# code for side-by-side plots
+#### Side-by-Side Plots
 
+Below are side-by-side plots showing the group means and SDs from the replication data (Plot "A") and the group means and SDs from the original data (Plot "B").
+
+##### Ratings of the Unethicality of the Buyer
+```{r, echo=FALSE}
+# code for side-by-side plots
 side_by_side_buyer_unethicality_plots <- plot_grid(mydata_buyer_unethicality_plot, originaldata_buyer_unethicality_plot, labels="AUTO")
 
-side_by_side_buyer_unethicality_plots
-
-side_by_side_answer_unethicality_plots <- plot_grid(mydata_answer_unethicality_plot, originaldata_answer_unethicality_plot, labels="AUTO")
-
-side_by_side_answer_unethicality_plots
-
-side_by_side_BuyerTrust_plots <- plot_grid(mydata_BuyerTrust_plot, originaldata_BuyerTrust_plot, labels="AUTO")
-
-side_by_side_BuyerTrust_plots 
-
-side_by_side_FutureNegotiation_plots <- plot_grid(mydata_FutureNegotiation_plot, originaldata_FutureNegotiation_plot, labels="AUTO")
-
-side_by_side_FutureNegotiation_plots
+print(side_by_side_buyer_unethicality_plots)
 ```
 
-### Exploratory analyses
+##### Ratings of the Unethicality of the Buyer's Answer
+
+Please note that Plot "B" below does not have SD bars for the Honest condition because the group SD was not reported for this measure (see Table 2, Rogers et al., 2017).
+
+```{r, echo=FALSE, warning=FALSE}
+side_by_side_answer_unethicality_plots <- plot_grid(mydata_answer_unethicality_plot, originaldata_answer_unethicality_plot, labels="AUTO")
+
+print(side_by_side_answer_unethicality_plots)
+```
+
+##### Ratings of Trust in the Buyer
+
+```{r, echo=FALSE}
+side_by_side_BuyerTrust_plots <- plot_grid(mydata_BuyerTrust_plot, originaldata_BuyerTrust_plot, labels="AUTO")
+
+print(side_by_side_BuyerTrust_plots)
+```
+
+##### Ratings of Likelihood of Future Negotiation
+
+```{r, echo=FALSE}
+side_by_side_FutureNegotiation_plots <- plot_grid(mydata_FutureNegotiation_plot, originaldata_FutureNegotiation_plot, labels="AUTO")
+
+print(side_by_side_FutureNegotiation_plots)
+```
+
+### Exploratory Analyses
 
 Any follow-up analyses desired (not required).  
 
