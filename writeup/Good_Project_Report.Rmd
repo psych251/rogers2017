@@ -40,13 +40,15 @@ Because I am relatively new to R and Github, I think that one of the primary cha
 
 ### Power Analysis
 
-Since effect sizes were not reported in the original paper, I calcuated effect sizes using the group means and standard deviations reported in Table 2 (Rogers et al., 2017). Since the standard deviation was not reported for the mean rating of the unethicality of the Buyer's answer in the Honest condition, I calcuated the effect size of each condition contrast (Honest vs. Palter, Honest vs. Lie by Commission, and Palter vs. Lie by Commission) for the other three measures (rating of the unethicality of the Buyer, trust in the Buyer, and likelihood of future negotiation). Most of the calculated effect sizes were in the medium range (Cohen's d = ~0.5 for each).
+Since effect sizes were not reported in the original paper, I calcuated the effect size for the analysis of interest using the condition means and standard deviations reported in Table 2 (Rogers et al., 2017) under the heading "Unethical Buyer." (These means and standard deviations pertained specifically to the index indicating the extent to which participants found their trading partner [the "Buyer"] unethical.)
 
-Using Cohen's d = 0.5, the sample size needed to achieve 80% power was calculated via G*Power. The calculated sample size was 159 participants. Since this is incredibly close to the sample size used in the original study (where N = 160), the goal for the present replication will be to also recruit 160 participants. (While additional participants could be recruited in order to achieve greater power, this is not feasible within the budget constraints of the present project and is not necessary, given that a similar power level was achieved by the original study.)
+Condition means, variances, and sizes (n) were entered into WebPower's effect size calculator for a fixed-effects, omnibus, one-way ANOVA. The resulting effect size was f = 0.2526, which is equivalent to Cohen's d = 0.5052.
+
+Using an effect size of f = 0.2526, the sample size needed to achieve 80% power was calculated via G*Power. The calculated sample size was 156 participants. This is remarkably close to the sample size used in the original study (where N = 160). Given that running this study with 156 participants already exceeds the funds allotted to this project, the goal for the present replication will be to to recruit 156 participants. (While additional participants could be recruited in order to achieve greater power, this is not feasible within the budget constraints of the present project.)
 
 ### Planned Sample
 
-The original study was carried out with 160 participants (who were paid $0.50 each) on Amazon Mechanical Turk. Participants (N = 160, as determined by a power analysis) will be recruited in the same manner. Only adults (ages 18 and older) living in the United States will be eligible to participate. 
+The original study was carried out with 160 participants (who were paid $0.50 each) on Amazon Mechanical Turk. Participants (N = 156, as determined by a power analysis) will be recruited in the same manner. Only adults (ages 18 and older) living in the United States will be eligible to participate. 
 
 In the original study, participants who did not pass two initial attention check items (which comprised the first part of the survey and occurred prior to condition assignment) were directed to the end of the survey (it is unclear whether they received payment). Because class policy specifies that payment of participants is not contingent on their performance or completion of all survey questions, I plan to pay participants who begin the survey but fail the initial attention check items; however, consistent with the original study, I will redirect these participants to the end of the survey immediately after attention check failure. Therefore, they will not be assigned to condition and will not be included in the final sample. (In the original study, while 160 were recruited, 5 failed the attention check, leaving a total of 155 participants.)
 
@@ -117,11 +119,15 @@ Per the original study, participants will be excluded if they fail either (or bo
 
 #### Key Analysis of Interest
 
-The key analysis of interest is a simple linear regression, which will be used to assess the effect of condition (paltering, lying by commission, or honesty) on participants' ratings of the ethicality of the Buyer's answer, the ethicality of the Buyer themselves, their trust in the Buyer, and likelihood of engaging in a future negotiation with the Buyer. (Please note that "ethicality" ratings included in these analyses will be an average of participants' ratings of the extent to which they believe the Buyer [or the Buyer's answer] is "unethical," "dishonest," and "immoral". This procedure was used in the original study, which referred to these averages as "ethicality indexes".)
+The key analysis of interest is a simple linear regression, which will be used to assess the effect of condition (paltering, lying by commission, or honesty) on participants' ratings of the ethicality of the Buyer. (Please note that this "ethicality rating" is an average of participants' ratings on three items assessing the extent to which they believe the Buyer is "unethical," "dishonest," and "immoral". This procedure was used in the original study, which referred to this average as "ethicality index".)
 
 A simple linear regression was chosen due to its being the analysis used in the original study. By using this analysis, I will be able to directly compare my findings with those of the original authors.
 
 While an ordinal regression might be considered more appropriate for data comprised of Likert scale ratings, it is common practice to treat such ratings as continuous (rather than ordinal) variables and enter them into a regression model accordingly. A simple linear regression, conducted for each ethicality index, the trust measure, as well as the likelihood of future negotiation measure, will allow me to determine the extent to which participants' ratings for each of these measures differed depending on whether the Buyer was honest, paltered, or lied by commission.
+
+#### Other Planned Analyses
+
+In addition to the key analysis of interest, I plan to also run three simple linear regressions to assess the effect of condition on participants' ratings of the ethicality of the Buyer's answer (which, like the Buyer ethicality rating, will also be in the form of an "ethicality index" representing an average across three items assessing the extent to which they believe the Buyer is "unethical," "dishonest," and "immoral"), their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer. 
 
 ### Differences from Original Study
 
@@ -250,7 +256,7 @@ ans_ethicality_lm_data <- data_with_ans_unethicality_index %>%
 
 ### Confirmatory analysis
 
-The analyses as specified in the analysis plan. Simple linear regressions will be conducted in order to determine the effect of condition (if any) on participants' ratings of the Buyer's ethicality, their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.
+The analyses as specified in the analysis plan. A simple linear regression will be conducted in order to determine the effect of condition (if any) on participants' ratings of the Buyer's ethicality. Additional (non-key) linear regressions will assess the effect of condition on participants' ratings of the ethicality of the Buyer's answer, their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.
 
 Please note that the confirmatory analysis code has not been included in this report, but can be found in the code in the Project Report R Markdown file in the 'rogers2017' folder on GitHub.
 
@@ -462,11 +468,27 @@ print(Future_Negotiation_model_PalterRef_standardized)
 
 # Means and SDs of replication data (needed for plots)
 
+buyer_unethicality_condition_ns <- data_with_buyer_unethicality_index %>% 
+  filter(Buyer_Unethical_Question == 1) %>% 
+  group_by(Condition) %>%
+  tally()
+
 buyer_unethicality <- data_with_buyer_unethicality_index %>%
   filter(Buyer_Unethical_Question == 1) %>% 
   group_by(Condition) %>%
   summarise(buyer_unethicality_mean = mean(BuyerUnethicalityIndex),
             buyer_unethicality_SD = sd(BuyerUnethicalityIndex))
+
+buyer_unethicality <- buyer_unethicality %>% 
+ mutate(buyer_unethicality_ns = buyer_unethicality_condition_ns$n,
+        buyer_unethicality_SE = buyer_unethicality_SD/sqrt(buyer_unethicality_ns))
+```
+
+```{r, include=FALSE}
+answer_unethicality_condition_ns <- data_with_ans_unethicality_index %>% 
+  filter(Ans_Unethical_Question == 1) %>% 
+  group_by(Condition) %>%
+  tally()
 
 answer_unethicality <- data_with_ans_unethicality_index %>%
   filter(Ans_Unethical_Question == 1) %>% 
@@ -474,15 +496,39 @@ answer_unethicality <- data_with_ans_unethicality_index %>%
   summarise(answer_unethicality_mean = mean(AnsUnethicalityIndex),
             answer_unethicality_SD = sd(AnsUnethicalityIndex))
 
+answer_unethicality <- answer_unethicality %>% 
+ mutate(answer_unethicality_ns = answer_unethicality_condition_ns$n,
+        answer_unethicality_SE = answer_unethicality_SD/sqrt(answer_unethicality_ns))
+```
+
+```{r, include=FALSE}
+BuyerTrust_condition_ns <- trust_mean_data %>% 
+  group_by(Condition) %>%
+  tally()
+
 BuyerTrust_means <- trust_mean_data %>%
   group_by(Condition) %>%
   summarise(BuyerTrust_mean = mean(BuyerTrust),
            BuyerTrust_SD = sd(BuyerTrust)) 
 
+BuyerTrust_means <- BuyerTrust_means %>% 
+ mutate(BuyerTrust_ns = BuyerTrust_condition_ns$n,
+        BuyerTrust_SE = BuyerTrust_SD/sqrt(BuyerTrust_ns))
+```
+
+```{r, include=FALSE}
+FutureNegotiation_condition_ns <- future_negotiations_mean_data %>% 
+  group_by(Condition) %>%
+  tally()
+
 FutureNegotiation_means <- future_negotiations_mean_data %>%
   group_by(Condition) %>%
   summarise(FutureNegotiation_mean = mean(FutureNegotiation),
             FutureNegotiation_SD = sd(FutureNegotiation))
+
+FutureNegotiation_means <- FutureNegotiation_means %>% 
+ mutate(FutureNegotiation_ns = FutureNegotiation_condition_ns$n,
+        FutureNegotiation_SE = FutureNegotiation_SD/sqrt(FutureNegotiation_ns))
 ```
 
 ```{r, include=FALSE}
@@ -492,22 +538,32 @@ FutureNegotiation_means <- future_negotiations_mean_data %>%
 mydata_buyer_unethicality_plot <- ggplot(buyer_unethicality, aes(x=Condition, y=buyer_unethicality_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=buyer_unethicality_mean - buyer_unethicality_SD, ymax=buyer_unethicality_mean + buyer_unethicality_SD), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of Buyer ethicality
+  geom_errorbar(aes(ymin=buyer_unethicality_mean - buyer_unethicality_SE, ymax=buyer_unethicality_mean + buyer_unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of Buyer ethicality
 
 mydata_answer_unethicality_plot <- ggplot(answer_unethicality, aes(x=Condition, y=answer_unethicality_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=answer_unethicality_mean - answer_unethicality_SD, ymax=answer_unethicality_mean + answer_unethicality_SD), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of the ethicality of the Buyer's answer
+  geom_errorbar(aes(ymin=answer_unethicality_mean - answer_unethicality_SE, ymax=answer_unethicality_mean + answer_unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of the ethicality of the Buyer's answer
 
 mydata_BuyerTrust_plot <- ggplot(BuyerTrust_means, aes(x=Condition, y=BuyerTrust_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SD, ymax=BuyerTrust_mean + BuyerTrust_SD), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of trust in the Buyer
+  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of trust in the Buyer
 
 mydata_FutureNegotiation_plot <- ggplot(FutureNegotiation_means, aes(x=Condition, y=FutureNegotiation_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SD, ymax=FutureNegotiation_mean + FutureNegotiation_SD), width = .2, position = position_dodge(.9))  # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
+  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SE, ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position = position_dodge(.9))  # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
+```
+
+```{r, include=FALSE}
+# adding SEs to data frame containing original paper means and SDs
+
+original_paper_data <- original_paper_data %>% 
+  mutate(Buyer_Unethicality_SE = Buyer_Unethicality_SD/sqrt(51),
+         Answer_Unethicality_SE = Answer_Unethicality_SD/sqrt(51),
+         BuyerTrust_SE = BuyerTrust_SD/sqrt(51),
+         FutureNegotiation_SE = FutureNegotiation_SD/sqrt(51))
 ```
 
 ```{r, include=FALSE}
@@ -517,27 +573,27 @@ mydata_FutureNegotiation_plot <- ggplot(FutureNegotiation_means, aes(x=Condition
 originaldata_buyer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condition, y=Buyer_Unethicality_Mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=Buyer_Unethicality_Mean - Buyer_Unethicality_SD, ymax=Buyer_Unethicality_Mean + Buyer_Unethicality_SD), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of Buyer ethicality
+  geom_errorbar(aes(ymin=Buyer_Unethicality_Mean - Buyer_Unethicality_SE, ymax=Buyer_Unethicality_Mean + Buyer_Unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of Buyer ethicality
 
 originaldata_answer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condition, y=Answer_Unethicality_Mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=Answer_Unethicality_Mean - Answer_Unethicality_SD, ymax=Answer_Unethicality_Mean + Answer_Unethicality_SD), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of the ethicality of the Buyer's answer
+  geom_errorbar(aes(ymin=Answer_Unethicality_Mean - Answer_Unethicality_SE, ymax=Answer_Unethicality_Mean + Answer_Unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of the ethicality of the Buyer's answer
 
 originaldata_BuyerTrust_plot <- ggplot(original_paper_data, aes(x=Condition, y=BuyerTrust_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SD, ymax=BuyerTrust_mean + BuyerTrust_SD), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of trust in the Buyer
+  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of trust in the Buyer
 
 originaldata_FutureNegotiation_plot <- ggplot(original_paper_data, aes(x=Condition, y=FutureNegotiation_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SD, ymax=FutureNegotiation_mean + FutureNegotiation_SD), width = .2, position = position_dodge(.9))  # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
+  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SE, ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position = position_dodge(.9))  # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
 ```
 
 #### Side-by-Side Plots
 
-Below are side-by-side plots showing the group means and SDs from the replication data (Plot "A") and the group means and SDs from the original data (Plot "B").
+Below are side-by-side plots showing the group means and SEs from the replication data (Plot "A") and the group means and SEs from the original data (Plot "B").
 
 ##### Ratings of the Unethicality of the Buyer
 ```{r, echo=FALSE}
@@ -549,7 +605,7 @@ print(side_by_side_buyer_unethicality_plots)
 
 ##### Ratings of the Unethicality of the Buyer's Answer
 
-Please note that Plot "B" below does not have SD bars for the Honest condition because the group SD was not reported for this measure (see Table 2, Rogers et al., 2017).
+Please note that Plot "B" below does not have SE bars for the Honest condition because the group SD was not reported for this measure (see Table 2, Rogers et al., 2017).
 
 ```{r, echo=FALSE, warning=FALSE}
 side_by_side_answer_unethicality_plots <- plot_grid(mydata_answer_unethicality_plot, originaldata_answer_unethicality_plot, labels="AUTO")
