@@ -178,7 +178,7 @@ original_paper_data <- read_csv("https://raw.githubusercontent.com/psych251/roge
 
 clean_data <- replication_data %>% 
   filter(ConsentYorN == "1", AC1 == "1", AC2 == "21") %>%  # filter out cases where the particpant did not consent or did not pass either attention check
-  select(-c(1:17, 43:45)) %>% # 21 to 36
+  select(-c(1:17, 43:45, 50)) %>% 
   slice(-1:-2) # removes unnecessary columns and rows
 
 clean_data <- clean_data %>% 

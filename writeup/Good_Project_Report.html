@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kayla Good (kagood@stanford.edu)" />
 
-<meta name="date" content="2019-11-16" />
+<meta name="date" content="2019-11-17" />
 
 <title>Replication of Study 3 in Artful Paltering: The Risks and Rewards of Using Truthful Statements to Mislead Others by Rogers, Zeckhauser, Gino, Norton, &amp; Schweitzer (2017, Journal of Personality and Social Psychology)</title>
 
@@ -1512,7 +1512,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Replication of Study 3 in Artful Paltering: The Risks and Rewards of Using Truthful Statements to Mislead Others by Rogers, Zeckhauser, Gino, Norton, &amp; Schweitzer (2017, Journal of Personality and Social Psychology)</h1>
 <h4 class="author">Kayla Good (<a href="mailto:kagood@stanford.edu" class="email">kagood@stanford.edu</a>)</h4>
-<h4 class="date">November 16, 2019</h4>
+<h4 class="date">November 17, 2019</h4>
 
 </div>
 
@@ -1662,7 +1662,7 @@ original_paper_data &lt;- read_csv(&quot;https://raw.githubusercontent.com/psych
 
 clean_data &lt;- replication_data %&gt;% 
   filter(ConsentYorN == &quot;1&quot;, AC1 == &quot;1&quot;, AC2 == &quot;21&quot;) %&gt;%  # filter out cases where the particpant did not consent or did not pass either attention check
-  select(-c(1:17, 43:45)) %&gt;% # 21 to 36
+  select(-c(1:17, 43:45, 50)) %&gt;% 
   slice(-1:-2) # removes unnecessary columns and rows
 
 clean_data &lt;- clean_data %&gt;% 
