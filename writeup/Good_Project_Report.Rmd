@@ -168,6 +168,7 @@ library(tidyverse)
 library(car)
 library(lm.beta)
 library(cowplot)
+library(ggthemes)
 
 #### Import data
 
@@ -178,22 +179,19 @@ original_paper_data <- read_csv("https://raw.githubusercontent.com/psych251/roge
 #### Data exclusion / filtering
 
 clean_data <- replication_data %>% 
+  filter(ConsentYorN == "1", AC1 == "1", AC2 == "21") %>%  # filter out cases where the particpant did not consent or did not pass either attention check
   select(-c(1:17, 43:45)) %>% # 21 to 36
   slice(-1:-2) # removes unnecessary columns and rows
 
 clean_data <- clean_data %>% 
-  filter(ConsentYorN == "1", AC1 == "1", AC2 == "21") # filter out cases where the particpant did not consent or did not pass either attention check
-
-clean_data <- clean_data %>% 
   mutate(Sub_ID = seq.int(nrow(clean_data))) %>%  # create subjectID column
-  mutate(Condition = ifelse(!is.na(`PalterTiming_First Click`), "Palter", 
+  mutate(Condition = ifelse(!is.na(`PalterTiming_First Click`), "Palter",
                             ifelse(!is.na(`LieTiming_First Click`), "Lie",
-                                   ifelse(!is.na(`HonestyTiming_First Click`), "Honest", NA)))) # creates column with condition assignment
+                            ifelse(!is.na(`HonestyTiming_First Click`), "Honest", NA)))) %>% 
+# creates column with condition assignment  
+                            select(-c(contains("Timing")))  # this gets rid of the timing information, which we just needed to get condition assignment
 
-clean_data <- clean_data %>% 
-  select(-c(contains("Timing"))) # this gets rid of the timing information, which we just needed to get condition assignment
-
-clean_data$Sub_ID = factor(clean_data$Sub_ID)
+clean_data$Sub_ID = factor(clean_data$Sub_ID) # converts SubID values to factor
 
 #### Prepare data for analysis - create columns etc.
 
@@ -201,51 +199,38 @@ recoded_data <- clean_data %>%
    mutate(ConsentYorN = ifelse(ConsentYorN == 1, "YES", "NO"),
           Gender = ifelse(Gender == 1, "Male", "Female"),
           AC1 = ifelse(AC1 == 1, "Correct", "Incorrect"),
-          AC2 = ifelse(AC2 == 21, "Correct", "Incorrect")) # recode variables 
+          AC2 = ifelse(AC2 == 21, "Correct", "Incorrect")) %>%  # recode variables 
+          mutate_at(vars(Condition), as.factor)
 
-long_recoded_data <- recoded_data %>% 
+data_with_buyer_unethicality_index <- recoded_data %>% 
+    select(-contains("AnswerUnethical"), -FutureNegotiation, -BuyerTrust) %>% 
+    pivot_longer(cols = starts_with("BuyerUnethical"),
+    names_to = "Buyer_Unethical_Question",
+    names_prefix = "BuyerUnethical_",
+    values_to = "BuyerUnethicalityRating",
+    values_drop_na = TRUE) %>% # pivots ratings on three questions re: the unethicality of the Buyer themselves to long form
+    mutate_at(vars(BuyerUnethicalityRating), as.numeric) %>% # converts data type of Likert ratings from character to numeric 
+    group_by(Sub_ID) %>% 
+    mutate(BuyerUnethicalityIndex = mean(BuyerUnethicalityRating, na.rm = TRUE)) # creates column with average across the three items re: the unethicality of the buyer's answer
+
+data_with_ans_unethicality_index <- recoded_data %>% 
+    select(-contains("BuyerUnethical"), -FutureNegotiation, -BuyerTrust) %>% 
     pivot_longer(cols = starts_with("AnswerUnethical"),
     names_to = "Ans_Unethical_Question",
     names_prefix = "AnswerUnethical_",
     values_to = "AnsUnethicalityRating",
     values_drop_na = TRUE) %>%  # pivots ratings on three questions re: the unethicality of the Buyer's answer to long form
-  pivot_longer(
-    cols = starts_with("BuyerUnethical"),
-    names_to = "Buyer_Unethical_Question",
-    names_prefix = "BuyerUnethical_",
-    values_to = "BuyerUnethicalityRating",
-    values_drop_na = TRUE) # pivots ratings on three questions re: the unethicality of the Buyer themselves to long form
+    mutate_at(vars(AnsUnethicalityRating), as.numeric) %>% # converts data type of Likert ratings from character to numeric 
+    group_by(Sub_ID) %>% 
+    mutate(AnsUnethicalityIndex = mean(AnsUnethicalityRating, na.rm = TRUE)) # creates column with average across the three items re: the unethicality of the buyer's answer
 
-long_recoded_data_numeric_ratings <- long_recoded_data %>% 
-  mutate_at(vars(FutureNegotiation, BuyerTrust, AnsUnethicalityRating, BuyerUnethicalityRating), as.numeric) # converts data type of Likert ratings from character to numeric 
+buyer_trust_data <- recoded_data %>% 
+    select(-contains("AnswerUnethical"), -contains("BuyerUnethical"), -FutureNegotiation) %>% 
+    mutate_at(vars(BuyerTrust), as.numeric) # converts data type of Likert ratings from character to numeric 
 
-buyer_mean_data <- long_recoded_data_numeric_ratings %>% 
-  filter(Ans_Unethical_Question == 1)
-
-data_with_buyer_unethicality_index <- buyer_mean_data %>% 
-  group_by(Sub_ID) %>% 
-  mutate(BuyerUnethicalityIndex = mean(BuyerUnethicalityRating, na.rm = TRUE))
-
-data_with_buyer_unethicality_index$Condition <- as.factor(data_with_buyer_unethicality_index$Condition) # converts condition from character to factor
-
-answer_mean_data <- long_recoded_data_numeric_ratings %>% 
-  filter(Buyer_Unethical_Question == 1)
-
-data_with_ans_unethicality_index <- answer_mean_data %>% 
-  group_by(Sub_ID) %>% 
-  mutate(AnsUnethicalityIndex = mean(AnsUnethicalityRating, na.rm = TRUE))
-
-data_with_ans_unethicality_index$Condition <- as.factor(data_with_ans_unethicality_index $Condition) # converts condition from character to factor
-
-trust_mean_data <- long_recoded_data_numeric_ratings %>% 
-  filter(Buyer_Unethical_Question == 1 & Ans_Unethical_Question == 1) 
-
-trust_mean_data$Condition <- as.factor(trust_mean_data$Condition) # converts condition from character to factor
-
-future_negotiations_mean_data <- long_recoded_data_numeric_ratings %>% 
-  filter(Buyer_Unethical_Question == 1 & Ans_Unethical_Question == 1) 
-
-future_negotiations_mean_data$Condition <- as.factor(future_negotiations_mean_data$Condition) # converts condition from character to factor
+future_negotiation_data <- recoded_data %>% 
+    select(-contains("AnswerUnethical"), -contains("BuyerUnethical"), -BuyerTrust) %>% 
+    mutate_at(vars(FutureNegotiation), as.numeric) # converts data type of Likert ratings from character to numeric 
 
 buyer_ethicality_lm_data <- data_with_buyer_unethicality_index %>% 
   filter(Buyer_Unethical_Question == 1)
@@ -370,9 +355,9 @@ Here is a summary of the effect of condition on ratings of trust in the Buyer, w
 ```{r, echo=FALSE}
 #  Trust in Buyer - with Lie as reference group
 
-trust_mean_data$Condition <- relevel(trust_mean_data$Condition, ref = "Lie") # changes reference group to Lie condition
+buyer_trust_data$Condition <- relevel(buyer_trust_data$Condition, ref = "Lie") # changes reference group to Lie condition
 
-BuyerTrust_model_LieRef <- lm(BuyerTrust ~ Condition, data = trust_mean_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Lie condition as reference group
+BuyerTrust_model_LieRef <- lm(BuyerTrust ~ Condition, data = buyer_trust_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Lie condition as reference group
 
 BuyerTrust_model_LieRef_nonstandardized <- summary(BuyerTrust_model_LieRef) # summary of linear regression described immediately above
 
@@ -386,9 +371,9 @@ Here is a summary of the effect of condition on ratings of trust in the Buyer, w
 ```{r, echo=FALSE}
 #  Trust in Buyer - with Honest as reference group
 
-trust_mean_data$Condition <- relevel(trust_mean_data$Condition, ref = "Honest") # changes reference group to Honest condition
+buyer_trust_data$Condition <- relevel(buyer_trust_data$Condition, ref = "Honest") # changes reference group to Honest condition
 
-BuyerTrust_model_HonestRef <- lm(BuyerTrust ~ Condition, data = trust_mean_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Honest condition as reference group
+BuyerTrust_model_HonestRef <- lm(BuyerTrust ~ Condition, data = buyer_trust_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Honest condition as reference group
 
 BuyerTrust_model_HonestRef_nonstandardized <- summary(BuyerTrust_model_HonestRef) # summary of linear regression described immediately above
 
@@ -402,9 +387,9 @@ Here is a summary of the effect of condition on ratings of trust in the Buyer, w
 ```{r, echo=FALSE}
 #  Trust in Buyer - with Palter as reference group
 
-trust_mean_data$Condition <- relevel(trust_mean_data$Condition, ref = "Palter") # changes reference group to Honest condition
+buyer_trust_data$Condition <- relevel(buyer_trust_data$Condition, ref = "Palter") # changes reference group to Honest condition
 
-BuyerTrust_model_PalterRef <- lm(BuyerTrust ~ Condition, data = trust_mean_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Palter condition as reference group
+BuyerTrust_model_PalterRef <- lm(BuyerTrust ~ Condition, data = buyer_trust_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Palter condition as reference group
 
 BuyerTrust_model_PalterRef_nonstandardized <- summary(BuyerTrust_model_PalterRef) # summary of linear regression described immediately above
 
@@ -420,9 +405,9 @@ Here is a summary of the effect of condition on participants' ratings of their l
 ```{r, echo=FALSE}
 #  Future Negotiation - with Lie as reference group
 
-future_negotiations_mean_data$Condition <- relevel(future_negotiations_mean_data$Condition, ref = "Lie") # changes reference group to Lie condition
+future_negotiation_data$Condition <- relevel(future_negotiation_data$Condition, ref = "Lie") # changes reference group to Lie condition
 
-Future_Negotiation_model_LieRef <- lm(FutureNegotiation ~ Condition, data = future_negotiations_mean_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Lie condition as reference group
+Future_Negotiation_model_LieRef <- lm(FutureNegotiation ~ Condition, data = future_negotiation_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Lie condition as reference group
 
 Future_Negotiation_model_LieRef_nonstandardized <- summary(Future_Negotiation_model_LieRef) # summary of linear regression described immediately above
 
@@ -436,9 +421,9 @@ Here is a summary of the effect of condition on participants' ratings of their l
 ```{r, echo=FALSE}
 # Future Negotiation - with Honest as reference group
 
-future_negotiations_mean_data$Condition <- relevel(future_negotiations_mean_data$Condition, ref = "Honest") # changes reference group to Honest condition
+future_negotiation_data$Condition <- relevel(future_negotiation_data$Condition, ref = "Honest") # changes reference group to Honest condition
 
-Future_Negotiation_model_HonestRef <- lm(FutureNegotiation ~ Condition, data = future_negotiations_mean_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Honest condition as reference group
+Future_Negotiation_model_HonestRef <- lm(FutureNegotiation ~ Condition, data = future_negotiation_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Honest condition as reference group
 
 Future_Negotiation_model_HonestRef_nonstandardized <- summary(Future_Negotiation_model_HonestRef) # summary of linear regression described immediately above
 
@@ -453,9 +438,9 @@ Here is a summary of the effect of condition on participants' ratings of their l
 
 # Future Negotiation - with Palter as reference group
 
-future_negotiations_mean_data$Condition <- relevel(future_negotiations_mean_data$Condition, ref = "Palter") # changes reference group to Palter condition
+future_negotiation_data$Condition <- relevel(future_negotiation_data$Condition, ref = "Palter") # changes reference group to Palter condition
 
-Future_Negotiation_model_PalterRef <- lm(FutureNegotiation ~ Condition, data = future_negotiations_mean_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Palter condition as reference group
+Future_Negotiation_model_PalterRef <- lm(FutureNegotiation ~ Condition, data = future_negotiation_data) # linear regression examining relationship between condition (explanatory variable) on ratings of trust in the Buyer (dependent variable), with Palter condition as reference group
 
 Future_Negotiation_model_PalterRef_nonstandardized <- summary(Future_Negotiation_model_PalterRef) # summary of linear regression described immediately above
 
@@ -473,15 +458,13 @@ buyer_unethicality_condition_ns <- data_with_buyer_unethicality_index %>%
   group_by(Condition) %>%
   tally()
 
-buyer_unethicality <- data_with_buyer_unethicality_index %>%
+buyer_unethicality_means <- data_with_buyer_unethicality_index %>%
   filter(Buyer_Unethical_Question == 1) %>% 
   group_by(Condition) %>%
   summarise(buyer_unethicality_mean = mean(BuyerUnethicalityIndex),
-            buyer_unethicality_SD = sd(BuyerUnethicalityIndex))
-
-buyer_unethicality <- buyer_unethicality %>% 
- mutate(buyer_unethicality_ns = buyer_unethicality_condition_ns$n,
-        buyer_unethicality_SE = buyer_unethicality_SD/sqrt(buyer_unethicality_ns))
+            buyer_unethicality_SD = sd(BuyerUnethicalityIndex)) %>% 
+  mutate(buyer_unethicality_ns = buyer_unethicality_condition_ns$n,
+         buyer_unethicality_SE = buyer_unethicality_SD/sqrt(buyer_unethicality_ns)) # creates data frame with condition means, standard devations, standard errors, and Ns for the buyer unethicality index
 ```
 
 ```{r, include=FALSE}
@@ -490,44 +473,42 @@ answer_unethicality_condition_ns <- data_with_ans_unethicality_index %>%
   group_by(Condition) %>%
   tally()
 
-answer_unethicality <- data_with_ans_unethicality_index %>%
+answer_unethicality_means <- data_with_ans_unethicality_index %>%
   filter(Ans_Unethical_Question == 1) %>% 
   group_by(Condition) %>%
   summarise(answer_unethicality_mean = mean(AnsUnethicalityIndex),
-            answer_unethicality_SD = sd(AnsUnethicalityIndex))
-
-answer_unethicality <- answer_unethicality %>% 
+            answer_unethicality_SD = sd(AnsUnethicalityIndex)) %>% 
  mutate(answer_unethicality_ns = answer_unethicality_condition_ns$n,
         answer_unethicality_SE = answer_unethicality_SD/sqrt(answer_unethicality_ns))
 ```
 
 ```{r, include=FALSE}
-BuyerTrust_condition_ns <- trust_mean_data %>% 
+buyer_trust_data$Condition <- relevel(buyer_trust_data$Condition, ref = "Honest") # changes reference group to Honest condition
+
+buyer_trust_condition_ns <- buyer_trust_data %>% 
   group_by(Condition) %>%
   tally()
 
-BuyerTrust_means <- trust_mean_data %>%
+buyer_trust_means <- buyer_trust_data %>%
   group_by(Condition) %>%
   summarise(BuyerTrust_mean = mean(BuyerTrust),
-           BuyerTrust_SD = sd(BuyerTrust)) 
-
-BuyerTrust_means <- BuyerTrust_means %>% 
- mutate(BuyerTrust_ns = BuyerTrust_condition_ns$n,
+           BuyerTrust_SD = sd(BuyerTrust)) %>% 
+ mutate(BuyerTrust_ns = buyer_trust_condition_ns$n,
         BuyerTrust_SE = BuyerTrust_SD/sqrt(BuyerTrust_ns))
 ```
 
 ```{r, include=FALSE}
-FutureNegotiation_condition_ns <- future_negotiations_mean_data %>% 
+future_negotiation_data$Condition <- relevel(future_negotiation_data$Condition, ref = "Honest") # changes reference group to Honest condition
+
+future_negotiation_condition_ns <- future_negotiation_data %>% 
   group_by(Condition) %>%
   tally()
 
-FutureNegotiation_means <- future_negotiations_mean_data %>%
+future_negotiation_means <- future_negotiation_data %>%
   group_by(Condition) %>%
   summarise(FutureNegotiation_mean = mean(FutureNegotiation),
-            FutureNegotiation_SD = sd(FutureNegotiation))
-
-FutureNegotiation_means <- FutureNegotiation_means %>% 
- mutate(FutureNegotiation_ns = FutureNegotiation_condition_ns$n,
+            FutureNegotiation_SD = sd(FutureNegotiation)) %>% 
+ mutate(FutureNegotiation_ns = future_negotiation_condition_ns$n,
         FutureNegotiation_SE = FutureNegotiation_SD/sqrt(FutureNegotiation_ns))
 ```
 
@@ -535,25 +516,43 @@ FutureNegotiation_means <- FutureNegotiation_means %>%
 
 # plots based on replication data
 
-mydata_buyer_unethicality_plot <- ggplot(buyer_unethicality, aes(x=Condition, y=buyer_unethicality_mean, fill=Condition)) +
+mydata_buyer_unethicality_plot <- ggplot(buyer_unethicality_means, aes(x=Condition, y=buyer_unethicality_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=buyer_unethicality_mean - buyer_unethicality_SE, ymax=buyer_unethicality_mean + buyer_unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of Buyer ethicality
+  geom_errorbar(aes(ymin=buyer_unethicality_mean - buyer_unethicality_SE,
+                    ymax=buyer_unethicality_mean + buyer_unethicality_SE), width = .2, position = position_dodge(.9)) + 
+  ylab("Buyer Unethicality (Mean Rating)") +
+  theme_few() +
+  theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of Buyer ethicality
 
-mydata_answer_unethicality_plot <- ggplot(answer_unethicality, aes(x=Condition, y=answer_unethicality_mean, fill=Condition)) +
+mydata_answer_unethicality_plot <- ggplot(answer_unethicality_means, aes(x=Condition, y=answer_unethicality_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=answer_unethicality_mean - answer_unethicality_SE, ymax=answer_unethicality_mean + answer_unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of the ethicality of the Buyer's answer
+  geom_errorbar(aes(ymin=answer_unethicality_mean - answer_unethicality_SE,
+                    ymax=answer_unethicality_mean + answer_unethicality_SE), width = .2, position
+                   = position_dodge(.9)) +
+  ylab("Unethicality of Buyer's Answer (Mean Rating)") +
+  theme_few() +
+  theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of the ethicality of the Buyer's answer
 
-mydata_BuyerTrust_plot <- ggplot(BuyerTrust_means, aes(x=Condition, y=BuyerTrust_mean, fill=Condition)) +
+mydata_buyer_trust_plot <- ggplot(buyer_trust_means, aes(x=Condition, y=BuyerTrust_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of trust in the Buyer
+  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE),
+                width = .2, position = position_dodge(.9)) +
+  ylab("Trust in Buyer (Mean Rating)") +
+  theme_few() +
+  theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of trust in the Buyer
 
-mydata_FutureNegotiation_plot <- ggplot(FutureNegotiation_means, aes(x=Condition, y=FutureNegotiation_mean, fill=Condition)) +
+mydata_future_negotiation_plot <- ggplot(future_negotiation_means, aes(x=Condition, y=FutureNegotiation_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SE, ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position = position_dodge(.9))  # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
+  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SE,
+                    ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position =
+                    position_dodge(.9)) +
+    ylab("Likelihood of Future Negotiation (Mean Rating)") +
+  theme_few() +
+  theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
 ```
 
 ```{r, include=FALSE}
@@ -573,22 +572,41 @@ original_paper_data <- original_paper_data %>%
 originaldata_buyer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condition, y=Buyer_Unethicality_Mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=Buyer_Unethicality_Mean - Buyer_Unethicality_SE, ymax=Buyer_Unethicality_Mean + Buyer_Unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of Buyer ethicality
+  geom_errorbar(aes(ymin=Buyer_Unethicality_Mean - Buyer_Unethicality_SE,
+                    ymax=Buyer_Unethicality_Mean + Buyer_Unethicality_SE), width = .2, position = 
+                    position_dodge(.9)) +
+    ylab("Buyer Unethicality (Mean Rating)") +
+    theme_few() +
+    theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of Buyer ethicality
 
 originaldata_answer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condition, y=Answer_Unethicality_Mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=Answer_Unethicality_Mean - Answer_Unethicality_SE, ymax=Answer_Unethicality_Mean + Answer_Unethicality_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of the ethicality of the Buyer's answer
+  geom_errorbar(aes(ymin=Answer_Unethicality_Mean - Answer_Unethicality_SE, 
+                    ymax=Answer_Unethicality_Mean + Answer_Unethicality_SE), width = .2, position 
+                    = position_dodge(.9)) +
+    ylab("Unethicality of Buyer's Answer (Mean Rating)") +
+    theme_few() +
+    theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of the ethicality of the Buyer's answer
 
 originaldata_BuyerTrust_plot <- ggplot(original_paper_data, aes(x=Condition, y=BuyerTrust_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE), width = .2, position = position_dodge(.9)) # plot of condition means for ratings of trust in the Buyer
+  geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE), 
+                width = .2, position = position_dodge(.9)) +
+    ylab("Trust in Buyer (Mean Rating)") +
+    theme_few() +
+    theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of trust in the Buyer
 
 originaldata_FutureNegotiation_plot <- ggplot(original_paper_data, aes(x=Condition, y=FutureNegotiation_mean, fill=Condition)) +
   geom_bar(position = "dodge", stat="identity") +
   scale_fill_brewer(palette="Set1") +
-  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SE, ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position = position_dodge(.9))  # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
+  geom_errorbar(aes(ymin=FutureNegotiation_mean - FutureNegotiation_SE, 
+                    ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position = 
+                    position_dodge(.9)) +
+    ylab("Likelihood of Future Negotiation (Mean Rating)") +
+    theme_few() +
+    theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
 ```
 
 #### Side-by-Side Plots
@@ -596,9 +614,13 @@ originaldata_FutureNegotiation_plot <- ggplot(original_paper_data, aes(x=Conditi
 Below are side-by-side plots showing the group means and SEs from the replication data (Plot "A") and the group means and SEs from the original data (Plot "B").
 
 ##### Ratings of the Unethicality of the Buyer
+
 ```{r, echo=FALSE}
 # code for side-by-side plots
-side_by_side_buyer_unethicality_plots <- plot_grid(mydata_buyer_unethicality_plot, originaldata_buyer_unethicality_plot, labels="AUTO")
+side_by_side_buyer_unethicality_plots <- plot_grid(mydata_buyer_unethicality_plot, originaldata_buyer_unethicality_plot, labels = c("Replication", "Original"), label_x = .25, hjust = -.15, vjust = 1.1)
+
+buyer_plot_x_title <- ggdraw() + draw_label("Condition", fontface = "plain")
+side_by_side_buyer_unethicality_plots <- plot_grid(side_by_side_buyer_unethicality_plots, buyer_plot_x_title, ncol=1, rel_heights=c(1, 0.1))
 
 print(side_by_side_buyer_unethicality_plots)
 ```
@@ -608,7 +630,10 @@ print(side_by_side_buyer_unethicality_plots)
 Please note that Plot "B" below does not have SE bars for the Honest condition because the group SD was not reported for this measure (see Table 2, Rogers et al., 2017).
 
 ```{r, echo=FALSE, warning=FALSE}
-side_by_side_answer_unethicality_plots <- plot_grid(mydata_answer_unethicality_plot, originaldata_answer_unethicality_plot, labels="AUTO")
+side_by_side_answer_unethicality_plots <- plot_grid(mydata_answer_unethicality_plot, originaldata_answer_unethicality_plot, labels = c("Replication", "Original"), label_x = .25, hjust = -.15, vjust = 1.1)
+
+answer_plot_x_title <- ggdraw() + draw_label("Condition", fontface = "plain")
+side_by_side_answer_unethicality_plots <- plot_grid(side_by_side_answer_unethicality_plots, answer_plot_x_title, ncol=1, rel_heights=c(1, 0.1))
 
 print(side_by_side_answer_unethicality_plots)
 ```
@@ -616,7 +641,10 @@ print(side_by_side_answer_unethicality_plots)
 ##### Ratings of Trust in the Buyer
 
 ```{r, echo=FALSE}
-side_by_side_BuyerTrust_plots <- plot_grid(mydata_BuyerTrust_plot, originaldata_BuyerTrust_plot, labels="AUTO")
+side_by_side_BuyerTrust_plots <- plot_grid(mydata_buyer_trust_plot, originaldata_BuyerTrust_plot, labels = c("Replication", "Original"), label_x = .25, hjust = -.15, vjust = 1.1)
+
+trust_plot_x_title <- ggdraw() + draw_label("Condition", fontface = "plain")
+side_by_side_BuyerTrust_plots <- plot_grid(side_by_side_BuyerTrust_plots, trust_plot_x_title, ncol=1, rel_heights=c(1, 0.1))
 
 print(side_by_side_BuyerTrust_plots)
 ```
@@ -624,7 +652,10 @@ print(side_by_side_BuyerTrust_plots)
 ##### Ratings of Likelihood of Future Negotiation
 
 ```{r, echo=FALSE}
-side_by_side_FutureNegotiation_plots <- plot_grid(mydata_FutureNegotiation_plot, originaldata_FutureNegotiation_plot, labels="AUTO")
+side_by_side_FutureNegotiation_plots <- plot_grid(mydata_future_negotiation_plot, originaldata_FutureNegotiation_plot, labels = c("Replication", "Original"), label_x = .25, hjust = -.15, vjust = 1.1)
+
+future_negotiation_plot_x_title <- ggdraw() + draw_label("Condition", fontface = "plain")
+side_by_side_FutureNegotiation_plots <- plot_grid(side_by_side_FutureNegotiation_plots, future_negotiation_plot_x_title, ncol=1, rel_heights=c(1, 0.1))
 
 print(side_by_side_FutureNegotiation_plots)
 ```
