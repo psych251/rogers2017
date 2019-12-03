@@ -12,7 +12,7 @@
 
 <meta name="author" content="Kayla Good (kagood@stanford.edu)" />
 
-<meta name="date" content="2019-11-23" />
+<meta name="date" content="2019-12-02" />
 
 <title>Replication of Study 3 in Artful Paltering: The Risks and Rewards of Using Truthful Statements to Mislead Others by Rogers, Zeckhauser, Gino, Norton, &amp; Schweitzer (2017, Journal of Personality and Social Psychology)</title>
 
@@ -1434,6 +1434,12 @@ summary {
 }
 }
 
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
 
 .toc-content {
   padding-left: 30px;
@@ -1512,7 +1518,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Replication of Study 3 in Artful Paltering: The Risks and Rewards of Using Truthful Statements to Mislead Others by Rogers, Zeckhauser, Gino, Norton, &amp; Schweitzer (2017, Journal of Personality and Social Psychology)</h1>
 <h4 class="author">Kayla Good (<a href="mailto:kagood@stanford.edu" class="email">kagood@stanford.edu</a>)</h4>
-<h4 class="date">November 23, 2019</h4>
+<h4 class="date">December 02, 2019</h4>
 
 </div>
 
@@ -1544,7 +1550,7 @@ div.tocify {
 <h2>Methods</h2>
 <div id="power-analysis" class="section level3">
 <h3>Power Analysis</h3>
-<p>Since effect sizes were not reported in the original paper, I calcuated the effect size for the analysis of interest using the condition means and standard deviations reported in Table 2 (Rogers et al., 2017) under the heading “Unethical Buyer.” (These means and standard deviations pertained specifically to the index indicating the extent to which participants found their trading partner [the “Buyer”] unethical.)</p>
+<p>Since effect sizes were not reported in the original paper, I calcuated the effect size for the analysis of interest using the condition means and standard deviations reported in Table 2 (Rogers et al., 2017) under the heading “Unethical Buyer.” (These means and standard deviations pertained specifically to the index indicating the extent to which participants found their trading partner [the “Buyer”] unethical.) The condition means and standard deviations for the ratings of the unethicality of the Buyer were specifically chosen because the key analysis of interest (further described in its own section later in this report) was the contrast (represented by a standardized beta coefficient and its corresponding p-value) indicating the difference between the paltering condition and the lying condition in participants’ ratings of the unethicality of the Buyer.</p>
 <p>Condition means, variances, and sizes (n) were entered into WebPower’s effect size calculator for a fixed-effects, omnibus, one-way ANOVA. The resulting effect size was f = 0.2526, which is equivalent to Cohen’s d = 0.5052.</p>
 <p>Using an effect size of f = 0.2526, the sample size needed to achieve 80% power was calculated via G*Power. The calculated sample size was 156 participants. This is remarkably close to the sample size used in the original study (where N = 160). Given that running this study with 156 participants already exceeds the funds allotted to this project, the goal for the present replication will be to to recruit 156 participants. (While additional participants could be recruited in order to achieve greater power, this is not feasible within the budget constraints of the present project.)</p>
 </div>
@@ -1608,13 +1614,14 @@ div.tocify {
 </div>
 <div id="key-analysis-of-interest" class="section level4">
 <h4>Key Analysis of Interest</h4>
-<p>The key analysis of interest is a simple linear regression, which will be used to assess the effect of condition (paltering, lying by commission, or honesty) on participants’ ratings of the ethicality of the Buyer. (Please note that this “ethicality rating” is an average of participants’ ratings on three items assessing the extent to which they believe the Buyer is “unethical,” “dishonest,” and “immoral”. This procedure was used in the original study, which referred to this average as “ethicality index”.)</p>
-<p>A simple linear regression was chosen due to its being the analysis used in the original study. By using this analysis, I will be able to directly compare my findings with those of the original authors.</p>
-<p>While an ordinal regression might be considered more appropriate for data comprised of Likert scale ratings, it is common practice to treat such ratings as continuous (rather than ordinal) variables and enter them into a regression model accordingly. A simple linear regression, conducted for each ethicality index, the trust measure, as well as the likelihood of future negotiation measure, will allow me to determine the extent to which participants’ ratings for each of these measures differed depending on whether the Buyer was honest, paltered, or lied by commission.</p>
+<p>The key analysis of interest is the contrast representing the difference between the paltering condition and the lying condition in participants’ ratings of the unethicality of the Buyer. This contrast is represented by a standardized beta coefficient (and its corresponding p-value), which will be extracted from a a simple standardized linear regression examining the effect of condition (paltering, lying by commission, or honesty) on participants’ ratings of the unethicality of the Buyer. (Please note that this “unethicality rating” is an average of participants’ ratings on three items assessing the extent to which they believe the Buyer is “unethical,” “dishonest,” and “immoral”. This procedure was used in the original study, which referred to this average as “ethicality index”.)</p>
+<p>The contrast respresented by the aforementioned standardized beta coefficient (and its corresponding p-value) was chosen as the key analysis of interest primarily because it tests a key hypothesis (and finding) of the original study (which is also a key claim made in the paper as a whole), namely, that individuals will evaluate someone who palters as negatively as someone who lies by commission in a negotiation context. If the p-value corresponding to this contrast is non-significant (p &gt; .05), then this will be considered a successful replication of this finding, as this will indicate that participants rated negotiation partners who engaged in paltering and negotiation partners who lied by commission as equally unethical. This, in turn, will lend further support to the claim that individuals evaluate palterers (who make statements that, while intended to mislead, are technically true) as severely as those who lie by commission (who make statements that are untruthful).</p>
+<p>Simple standardized linear regressions were also used in the original study, with contrasts between conditions (represented by standardized beta coefficients and their corresponding p-values) used to indicate differences (or a lack thereof). By employing a condition contrast within a simple standardized linear regression model as my key analysis of interest, I will be able to directly compare my findings with those of the original authors.</p>
+<p>As an additional note, while an ordinal regression might be considered more appropriate for data comprised of Likert scale ratings, it is common practice to treat such ratings as continuous (rather than ordinal) variables and enter them into a regression model accordingly. A simple linear regression, conducted for each ethicality index, the trust measure, as well as the likelihood of future negotiation measure, will allow me to determine the extent to which participants’ ratings for each of these measures differed depending on whether the Buyer was honest, paltered, or lied by commission.</p>
 </div>
 <div id="other-planned-analyses" class="section level4">
 <h4>Other Planned Analyses</h4>
-<p>In addition to the key analysis of interest, I plan to also run three simple linear regressions to assess the effect of condition on participants’ ratings of the ethicality of the Buyer’s answer (which, like the Buyer ethicality rating, will also be in the form of an “ethicality index” representing an average across three items assessing the extent to which they believe the Buyer is “unethical,” “dishonest,” and “immoral”), their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.</p>
+<p>In addition to the simple standardized linear regression model that will contain the key analysis of interest, I plan to also run three simple linear regressions to assess the effect of condition on participants’ ratings of the unethicality of the Buyer’s answer (which, like the Buyer unethicality rating, will also be in the form of an “ethicality index” representing an average across three items assessing the extent to which they believe the Buyer is “unethical,” “dishonest,” and “immoral”), their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.</p>
 </div>
 </div>
 <div id="differences-from-original-study" class="section level3">
