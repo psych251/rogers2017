@@ -173,7 +173,7 @@ library(ggthemes)
 
 #### Import data
 
-replication_data <- read_csv("https://raw.githubusercontent.com/psych251/rogers2017/master/data/rogers2017_full_replication_data.csv") # reading in data from github
+replication_data <- read_csv("https://raw.githubusercontent.com/psych251/rogers2017/master/data/PilotA_Replication_Data.csv") # reading in data from github
 
 original_paper_data <- read_csv("https://raw.githubusercontent.com/psych251/rogers2017/master/data/Rogers2017Study3Means.csv") # reading in data from github
 
