@@ -523,7 +523,7 @@ mydata_buyer_unethicality_plot <- ggplot(buyer_unethicality_means, aes(x=Conditi
   geom_errorbar(aes(ymin=buyer_unethicality_mean - buyer_unethicality_SE,
                     ymax=buyer_unethicality_mean + buyer_unethicality_SE), width = .2, position = position_dodge(.9)) + 
   ylab("Buyer Unethicality (Mean Rating)") +
-  theme_few() +
+  theme_classic() +
   theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of Buyer ethicality
 
 mydata_answer_unethicality_plot <- ggplot(answer_unethicality_means, aes(x=Condition, y=answer_unethicality_mean, fill=Condition)) +
@@ -533,7 +533,7 @@ mydata_answer_unethicality_plot <- ggplot(answer_unethicality_means, aes(x=Condi
                     ymax=answer_unethicality_mean + answer_unethicality_SE), width = .2, position
                    = position_dodge(.9)) +
   ylab("Unethicality of Buyer's Answer (Mean Rating)") +
-  theme_few() +
+  theme_classic() +
   theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of the ethicality of the Buyer's answer
 
 mydata_buyer_trust_plot <- ggplot(buyer_trust_means, aes(x=Condition, y=BuyerTrust_mean, fill=Condition)) +
@@ -542,7 +542,7 @@ mydata_buyer_trust_plot <- ggplot(buyer_trust_means, aes(x=Condition, y=BuyerTru
   geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE),
                 width = .2, position = position_dodge(.9)) +
   ylab("Trust in Buyer (Mean Rating)") +
-  theme_few() +
+  theme_classic() +
   theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of trust in the Buyer
 
 mydata_future_negotiation_plot <- ggplot(future_negotiation_means, aes(x=Condition, y=FutureNegotiation_mean, fill=Condition)) +
@@ -552,7 +552,7 @@ mydata_future_negotiation_plot <- ggplot(future_negotiation_means, aes(x=Conditi
                     ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position =
                     position_dodge(.9)) +
     ylab("Likelihood of Future Negotiation (Mean Rating)") +
-  theme_few() +
+  theme_classic() +
   theme(panel.border = element_blank(), axis.title.x = element_blank(), legend.position = "none") # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
 ```
 
@@ -577,7 +577,7 @@ originaldata_buyer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condit
                     ymax=Buyer_Unethicality_Mean + Buyer_Unethicality_SE), width = .2, position = 
                     position_dodge(.9)) +
     ylab("Buyer Unethicality (Mean Rating)") +
-    theme_few() +
+    theme_classic() +
     theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of Buyer ethicality
 
 originaldata_answer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condition, y=Answer_Unethicality_Mean, fill=Condition)) +
@@ -587,7 +587,7 @@ originaldata_answer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condi
                     ymax=Answer_Unethicality_Mean + Answer_Unethicality_SE), width = .2, position 
                     = position_dodge(.9)) +
     ylab("Unethicality of Buyer's Answer (Mean Rating)") +
-    theme_few() +
+    theme_classic() +
     theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of the ethicality of the Buyer's answer
 
 originaldata_BuyerTrust_plot <- ggplot(original_paper_data, aes(x=Condition, y=BuyerTrust_mean, fill=Condition)) +
@@ -596,7 +596,7 @@ originaldata_BuyerTrust_plot <- ggplot(original_paper_data, aes(x=Condition, y=B
   geom_errorbar(aes(ymin=BuyerTrust_mean - BuyerTrust_SE, ymax=BuyerTrust_mean + BuyerTrust_SE), 
                 width = .2, position = position_dodge(.9)) +
     ylab("Trust in Buyer (Mean Rating)") +
-    theme_few() +
+    theme_classic() +
     theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of trust in the Buyer
 
 originaldata_FutureNegotiation_plot <- ggplot(original_paper_data, aes(x=Condition, y=FutureNegotiation_mean, fill=Condition)) +
@@ -606,7 +606,7 @@ originaldata_FutureNegotiation_plot <- ggplot(original_paper_data, aes(x=Conditi
                     ymax=FutureNegotiation_mean + FutureNegotiation_SE), width = .2, position = 
                     position_dodge(.9)) +
     ylab("Likelihood of Future Negotiation (Mean Rating)") +
-    theme_few() +
+    theme_classic() +
     theme(panel.border = element_blank(), axis.title.x = element_blank(), axis.title.y = element_blank()) # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
 ```
 
