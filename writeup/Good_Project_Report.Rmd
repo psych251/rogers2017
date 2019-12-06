@@ -627,9 +627,9 @@ Below are side-by-side plots showing the group means and SEs from the replicatio
 ```{r}
 # code for side-by-side plots
 side_by_side_buyer_unethicality_plots <- plot_grid(
-  mydata_buyer_unethicality_plot + theme(legend.position = "none"), 
   originaldata_buyer_unethicality_plot + theme(legend.position = "none"), 
-  labels = c("Replication", "Original"), 
+  mydata_buyer_unethicality_plot + theme(legend.position = "none"), 
+  labels = c("Original", "Replication"), 
   label_x = .25, 
   hjust = -.55, 
   vjust = 1.1)
@@ -653,9 +653,9 @@ Please note that Plot "B" below does not have SE bars for the Honest condition b
 
 ```{r}
 side_by_side_answer_unethicality_plots <- plot_grid(
-  mydata_answer_unethicality_plot + theme(legend.position = "none"), 
   originaldata_answer_unethicality_plot + theme(legend.position = "none"), 
-  labels = c("Replication", "Original"), 
+  mydata_answer_unethicality_plot + theme(legend.position = "none"), 
+  labels = c("Original", "Replication"), 
   label_x = .25, 
   hjust = -.55, 
   vjust = 1.1)
@@ -677,9 +677,9 @@ print(side_by_side_answer_unethicality_plots)
 
 ```{r}
 side_by_side_BuyerTrust_plots <- plot_grid(
-  mydata_buyer_trust_plot + theme(legend.position = "none"), 
   originaldata_BuyerTrust_plot + theme(legend.position = "none"),
-  labels = c("Replication", "Original"), 
+  mydata_buyer_trust_plot + theme(legend.position = "none"), 
+  labels = c("Original", "Replication"), 
   label_x = .25, 
   hjust = -.55, 
   vjust = 1.1)
@@ -701,9 +701,9 @@ print(side_by_side_BuyerTrust_plots)
 
 ```{r}
 side_by_side_FutureNegotiation_plots <- plot_grid(
-  mydata_future_negotiation_plot + theme(legend.position = "none"), 
   originaldata_FutureNegotiation_plot + theme(legend.position = "none"), 
-  labels = c("Replication", "Original"), 
+  mydata_future_negotiation_plot + theme(legend.position = "none"), 
+  labels = c("Original", "Replication"), 
   label_x = .25, 
   hjust = -.55, 
   vjust = 1.1)
