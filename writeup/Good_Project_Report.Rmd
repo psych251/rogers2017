@@ -18,6 +18,8 @@ output:
 
 Github Project Repository: https://github.com/psych251/rogers2017
 
+Preregistration link: https://osf.io/bt2rq
+
 Original paper: https://github.com/psych251/rogers2017/blob/master/original_paper/Rogers_et_al_2017.pdf
 
 Link to paradigm: https://stanforduniversity.qualtrics.com/jfe/form/SV_8iX8T8N6pXtSpmt
