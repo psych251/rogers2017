@@ -756,10 +756,13 @@ model_m <- lm(BuyerUnethicalityIndex ~ Condition, data = mediation_data) # regre
 
 model_y_trust <- lm(BuyerTrust ~ BuyerUnethicalityIndex + Condition, data = mediation_data) # regresses the outcome variable (BuyerTrust) on both the mediator (Buyer unethicality) and the independent variable (Condition)
 
-med_model_BuyerTrust <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) 
+med_model_BuyerTrust <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) # generates model 
 
-print(summary(med_model_BuyerTrust))
-ggplot(med_model_BuyerTrust, aes(x = )
+print(summary(med_model_BuyerTrust)) # prints summary of mediation analysis
+
+print(plot(med_model_BuyerTrust, 
+           xlim = c(-1.5, .5),
+           xlab = "Estimate (95% CIs)")) # generates plot with point estimates, 95% CIs, and p-values for the ACME (average causal mediation effect), ADE (average direct effect), and total effect
 ```
 
 ```{r}
@@ -767,9 +770,13 @@ ggplot(med_model_BuyerTrust, aes(x = )
 
 model_y_future_negotiation <- lm(FutureNegotiation ~ BuyerUnethicalityIndex + Condition, data = mediation_data) # regresses the outcome variable (FutureNegotiation) on both the mediator (Buyer unethicality) and the independent variable (Condition)
 
-med_model_FutureNegotiation <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) 
+med_model_FutureNegotiation <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) # 
 
-summary(med_model_FutureNegotiation)
+print(summary(med_model_FutureNegotiation)) # prints summary of mediation analysis
+
+print(plot(med_model_FutureNegotiation,
+           xlim = c(-1, 0.5),
+           xlab = "Estimate (95% CIs)")) # generates plot with point estimates, 95% CIs, and p-values for the ACME (average causal mediation effect), ADE (average direct effect), and total effect
 ```
 
 #### Supplementary Exploratory Analyses
@@ -823,8 +830,6 @@ summary(med_fit_buyer_trust, standardized = TRUE)
 
 parameterEstimates(med_fit_buyer_trust, boot.ci.type = "bca.simple", level = 0.95, ci = TRUE, standardized = FALSE) %>% 
   kable()
-```
-
 ```
 
 
