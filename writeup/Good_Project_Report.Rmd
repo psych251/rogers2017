@@ -168,6 +168,7 @@ Participants' ratings of the extent to which the Buyer's answer, as well as the 
 #### Load Relevant Libraries and Functions
 
 library(tidyverse)
+library(knitr)
 library(car)
 library(lm.beta)
 library(cowplot)
@@ -228,7 +229,7 @@ data_with_ans_unethicality_index <- recoded_data %>%
     mutate(AnsUnethicalityIndex = mean(AnsUnethicalityRating, na.rm = TRUE)) # creates column with average across the three items re: the unethicality of the buyer's answer
 
 buyer_trust_data <- recoded_data %>% 
-    select(-contains("AnswerUnethical"), -contains("BuyerUnethical"), -FutureNegotiation) %>% 
+    select(-contains("AnswerUnethical"), -contains("BuyerUnethical"), -FutureNegotiation) %>%
     mutate_at(vars(BuyerTrust), as.numeric) # converts data type of Likert ratings from character to numeric 
 
 future_negotiation_data <- recoded_data %>% 
@@ -726,6 +727,106 @@ print(side_by_side_FutureNegotiation_plots)
 ### Exploratory Analyses
 
 Any follow-up analyses desired (not required).  
+
+```{r}
+
+mediation_data <- recoded_data %>% 
+    select(-contains("AnswerUnethical")) %>% # removes answer unethicality items, which will not be used in the exploratory mediation analyses
+    pivot_longer(cols = starts_with("BuyerUnethical"),
+    names_to = "Buyer_Unethical_Question",
+    names_prefix = "BuyerUnethical_",
+    values_to = "BuyerUnethicalityRating",
+    values_drop_na = TRUE) %>% # pivots ratings on three questions re: the unethicality of the Buyer themselves to long form
+    mutate_at(vars(BuyerUnethicalityRating), as.numeric) %>% # converts data type of Likert ratings from character to numeric 
+    group_by(Sub_ID) %>% 
+    mutate(BuyerUnethicalityIndex = mean(BuyerUnethicalityRating, na.rm = TRUE)) %>% # creates column with average across the three items re: the unethicality of the buyer's answer
+    filter(Buyer_Unethical_Question == 1) %>% # removes repeated data
+    select(-Buyer_Unethical_Question, -BuyerUnethicalityRating) %>%  # removes columns referencing individual items and ratings for Buyer unethicality, which are now unnecessary since mediation analyses will be carried out with the average across these items (the unethicality "index") for each participant
+    mutate(Condition = ifelse(Condition == "Honest", 0, 
+                              ifelse(Condition == "Lie", 1,
+                                     ifelse(Condition == "Palter", 2)))) # recodes condition using numeric values, as these are required by the mediate function that will be used for mediation analysis (see below)
+
+```
+
+```{r}
+# using mediation package to conduct mediation analysis for trust in Buyer
+
+set.seed(123)
+model_m <- lm(BuyerUnethicalityIndex ~ Condition, data = mediation_data) # regresses the mediator (Buyer unethicality) on the independent variable (Condition)
+
+model_y_trust <- lm(BuyerTrust ~ BuyerUnethicalityIndex + Condition, data = mediation_data) # regresses the outcome variable (BuyerTrust) on both the mediator (Buyer unethicality) and the independent variable (Condition)
+
+med_model_BuyerTrust <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) 
+
+print(summary(med_model_BuyerTrust))
+ggplot(med_model_BuyerTrust, aes(x = )
+```
+
+```{r}
+# using mediation package to conduct mediation analysis for likelihood of future negotiation
+
+model_y_future_negotiation <- lm(FutureNegotiation ~ BuyerUnethicalityIndex + Condition, data = mediation_data) # regresses the outcome variable (FutureNegotiation) on both the mediator (Buyer unethicality) and the independent variable (Condition)
+
+med_model_FutureNegotiation <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) 
+
+summary(med_model_FutureNegotiation)
+```
+
+#### Supplementary Exploratory Analyses
+
+```{r}
+# using mediation package again, but this time including specific condition contrasts
+
+med_model_BuyerTrust_honest_lie <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 1, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_BuyerTrust_honest_lie))
+
+med_model_BuyerTrust_lie_palter <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 1, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_BuyerTrust_lie_palter))
+
+med_model_BuyerTrust_honest_palter <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_BuyerTrust_honest_palter))
+```
+
+```{r}
+# using mediation package again, but this time including specific condition contrasts
+
+med_model_FutureNegotiation_honest_lie <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 1, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_FutureNegotiation_honest_lie))
+
+med_model_FutureNegotiation_lie_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 1, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_FutureNegotiation_lie_palter))
+
+med_model_FutureNegotiation_honest_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_FutureNegotiation_honest_palter))
+```
+
+```{r, message = FALSE}
+
+# using lavaan package to conduct mediation analysis
+
+buyer_trust_model <- '
+              BuyerUnethicalityIndex ~ a*Condition
+              BuyerTrust ~ b*BuyerUnethicalityIndex + c*Condition
+ 
+             indirect := a*b
+             direct   := c
+             total    := c + (a*b)
+'
+med_fit_buyer_trust <- sem(buyer_trust_model, data = mediation_data, se = "bootstrap")
+summary(med_fit_buyer_trust, standardized = TRUE)
+
+parameterEstimates(med_fit_buyer_trust, boot.ci.type = "bca.simple", level = 0.95, ci = TRUE, standardized = FALSE) %>% 
+  kable()
+```
+
+```
+
 
 ## Discussion
 
