@@ -173,6 +173,8 @@ library(car)
 library(lm.beta)
 library(cowplot)
 library(ggthemes)
+library(mediation)
+library(lavaan)
 
 #### Import data
 
@@ -726,9 +728,14 @@ print(side_by_side_FutureNegotiation_plots)
 
 ### Exploratory Analyses
 
-Any follow-up analyses desired (not required).  
+Follow-up exploratory analyses were conducted to explore whether participants' ratings of Buyer unethicality mediated the effect of condition on their 1) trust in the Buyer and 2) their likelihood of engaging in a future negotiation with the Buyer. While the original authors did not conduct these mediation analyses for Study 3 (the study targeted for replication in the present project), they did conduct a similar analysis in Study 1. In that study, the authors found that participants' opted to mislead a negotiation partner more often when they had to choose between paltering or honesty (vs. when they had to choose between lying or honesty); a mediation analysis carried out using the Sobel-Goodman bootstrapping method revealed that this effect was mediated by participants' perceived ethicality of the misleading option (either paltering or lying). (It is worth noting that, while the study I replicated did not find differences in participants' ratings of the ethicality between the paltering and lying conditions, this is because participants in the present study were the *targets* of deception rather than the ones engaging in it themselves.)
+
+For the present study, I decided to examine whether ratings of the unethicality of the Buyer mediated trust in the Buyer, as well as likelihood of future negotiation with the Buyer. The authors posit that those who palter or lie, compared to those who are honest, incur reputational costs (i.e., are perceived as more unethical). A negative reputation for being deceptive, in turn, has consequences for how much others trust these individuals as well as how much others are willing to negotiate with them in the future. This suggests that Buyer unethicality should, at least in part, mediate the effect of condition (whether the Buyer is honest, lies, or palters) on ratings of trust in the Buyer as well as likelihood of engaging in a future negotiation with them.
+
+To conduct these mediation analyses, I first created a dataframe containing the measures of interest.
 
 ```{r}
+# creating a dataframe for the purposes of mediation analysis, which includes the following measures: Buyer ethicality, trust in Buyer, and likelihood of future negotiation 
 
 mediation_data <- recoded_data %>% 
     select(-contains("AnswerUnethical")) %>% # removes answer unethicality items, which will not be used in the exploratory mediation analyses
@@ -745,76 +752,139 @@ mediation_data <- recoded_data %>%
     mutate(Condition = ifelse(Condition == "Honest", 0, 
                               ifelse(Condition == "Lie", 1,
                                      ifelse(Condition == "Palter", 2)))) # recodes condition using numeric values, as these are required by the mediate function that will be used for mediation analysis (see below)
-
 ```
+
+I then used a "set seed" function, as all mediation analyses involve simulations (and would therefore vary slightly with each run unless "set seed" had been used).
+
+```{r}
+set.seed(123) # using set seed for reproducibility (since mediation analysis involves simulations)
+```
+
+Using the "mediate" function from the "mediation" package (Tingley et al., 2019), I first created a model assessing the extent to which ratings of Buyer unethicality mediate the effect of condition on ratings of trust in the Buyer. Please note that, for all models I have generated using the "mediate" function, I have used the default number of simulations (1000) and the nonparametric bootstrap type. 
 
 ```{r}
 # using mediation package to conduct mediation analysis for trust in Buyer
 
-set.seed(123)
 model_m <- lm(BuyerUnethicalityIndex ~ Condition, data = mediation_data) # regresses the mediator (Buyer unethicality) on the independent variable (Condition)
 
 model_y_trust <- lm(BuyerTrust ~ BuyerUnethicalityIndex + Condition, data = mediation_data) # regresses the outcome variable (BuyerTrust) on both the mediator (Buyer unethicality) and the independent variable (Condition)
 
-med_model_BuyerTrust <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) # generates model 
+med_model_BuyerTrust <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) # generates mediation model 
+```
 
+The summary below shows the summary of the mediation model for trust in the Buyer. (Please note that, in all summaries and plots pertaining to mediation analyses, "ACME" refers to the average causal mediation effect and "ADE" refers to the average direct effect.)
+
+Both the indirect and direct effects are significant, suggesting partial mediation of Buyer unethicality on the relationship between condition and trust in the Buyer. This is consistent with the authors' claim that at least part of the reason why participants trust the Buyer less when they palter or lie (vs. when they are honest) is due to their perceiving the Buyer as more unethical.
+
+```{r}
 print(summary(med_model_BuyerTrust)) # prints summary of mediation analysis
+```
 
+The plot below depicts the results summarized above. The 95% bias-corrected confidence intervals for the indirect effect (ACME) and the direct-effect (ADE) do not contain zero, providing support for partial mediation.
+
+```{r}
 print(plot(med_model_BuyerTrust, 
            xlim = c(-1.5, .5),
            xlab = "Estimate (95% CIs)")) # generates plot with point estimates, 95% CIs, and p-values for the ACME (average causal mediation effect), ADE (average direct effect), and total effect
 ```
+
+I then created a model assessing the extent to which ratings of Buyer unethicality mediate the effect of condition on ratings of the likelihood of engaging in a future negotiation with the Buyer.
 
 ```{r}
 # using mediation package to conduct mediation analysis for likelihood of future negotiation
 
 model_y_future_negotiation <- lm(FutureNegotiation ~ BuyerUnethicalityIndex + Condition, data = mediation_data) # regresses the outcome variable (FutureNegotiation) on both the mediator (Buyer unethicality) and the independent variable (Condition)
 
-med_model_FutureNegotiation <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) # 
+med_model_FutureNegotiation <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", boot = TRUE, boot.ci.type = "perc", sims = 1000) # generates mediation model
+```
 
+The summary below shows the summary of the mediation model for likelihood of engaging in a future negotiation with the Buyer.
+
+As with the mediation model for trust in the Buyer, the indirect and direct effects are significant, suggesting partial mediation of Buyer unethicality on the relationship between condition and likelihood of engaging in a future negotiation with the Buyer. This is again consistent with the authors' claim; that is, at least part of the reason why participants report being less likely to engage in a future negotiation with the Buyer when they palter or lie (vs. when they are honest) is due to their perceiving the Buyer as more unethical.
+
+```{r}
 print(summary(med_model_FutureNegotiation)) # prints summary of mediation analysis
+```
 
+The plot below depicts the results summarized above. Again, the 95% bias-corrected confidence intervals for the indirect effect (ACME) and the direct-effect (ADE) do not contain zero, providing support for partial mediation.
+
+```{r}
 print(plot(med_model_FutureNegotiation,
            xlim = c(-1, 0.5),
            xlab = "Estimate (95% CIs)")) # generates plot with point estimates, 95% CIs, and p-values for the ACME (average causal mediation effect), ADE (average direct effect), and total effect
 ```
 
+Taken together, the mediation analyses reported above support the authors' claim that the influence of whether the Buyer was honest, lied, or paltered on participants' ratings of trust and likelihood of engaging in a future negotiation with the Buyer was due, in part, to perceptions of Buyer unethicality (which we know, from the confirmatory analyses, were higher in the deception conditions and lower in the honesty condition). This suggests that, when deception is discovered in a negotiation context, associated negative outcomes (i.e., lower trust and likelihood of future negotiation) are at least partially driven by negative reputational consequences (i.e., higher perceptions of unethicality).
+
 #### Supplementary Exploratory Analyses
+
+In conducting the mediation analyses reported above, I read the documentation for the "mediation" R package (Tingley et al., 2019), which stated that the "mediate" function is designed primarily to compare two conditions at a time (typically a "control" condition and a "treatment" condition). Since the present replication dealt with three conditions (honesty, paltering, and lying), I decided to run additional mediation models per the instructions in Section 3.3, entitled "Non-binary treatment variables". This section describes how to run a mediation model for a specific contrast between two levels of a condition variable; by running a model for each possible contrast (or certain contrasts of interest), one can examine the mediation effect (if any) and compare this across different contrasts.
+
+It is important to note that the mediation models below, like the ones described above, examine whether the effect of condition on trust in the Buyer and likelihood of engaging in a future negotiation with the Buyer is mediated by ratings of Buyer unethicality. However, these models take specific levels within the condition variable and examine each possible combination of them (honesty/lying, lying/paltering, and honesty/paltering).
+
+Beginning with the effect of condition on trust in the Buyer, here is a summary of the mediation model containing the honesty/lying contrast:
 
 ```{r}
 # using mediation package again, but this time including specific condition contrasts
 
 med_model_BuyerTrust_honest_lie <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 1, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
-print(summary(med_model_BuyerTrust_honest_lie))
+print(summary(med_model_BuyerTrust_honest_lie)) # prints summary of mediation analysis
+```
 
+And here is a summary of the model containing the lying/paltering contrast:
+
+```{r}
 med_model_BuyerTrust_lie_palter <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 1, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
-print(summary(med_model_BuyerTrust_lie_palter))
+print(summary(med_model_BuyerTrust_lie_palter)) # prints summary of mediation analysis
+```
 
+And finally, here is a summary of the model containing the honesty/paltering contrast:
+
+```{r}
 med_model_BuyerTrust_honest_palter <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
-print(summary(med_model_BuyerTrust_honest_palter))
+print(summary(med_model_BuyerTrust_honest_palter)) # prints summary of mediation analysis
 ```
+
+As you can see from the models above, they all show significant indirect and direct effects, confirming the findings from the original mediation model showing that Buyer unethicality partially mediates the effect of condition on trust in the Buyer.
+
+The models below examine the same condition contrasts, but instead examine the effect of condition on participants' reported likelihood of engaging in a future negotiation with the Buyer (and whether this is mediated by Buyer unethicality).
+
+First, here is a summary of the mediation model containing the honesty/lying contrast:
 
 ```{r}
 # using mediation package again, but this time including specific condition contrasts
 
 med_model_FutureNegotiation_honest_lie <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 1, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
-print(summary(med_model_FutureNegotiation_honest_lie))
-
-med_model_FutureNegotiation_lie_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 1, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
-
-print(summary(med_model_FutureNegotiation_lie_palter))
-
-med_model_FutureNegotiation_honest_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
-
-print(summary(med_model_FutureNegotiation_honest_palter))
+print(summary(med_model_FutureNegotiation_honest_lie)) # prints summary of mediation analysis
 ```
 
-```{r, message = FALSE}
+And here is a summary of the model containing the lying/paltering contrast:
 
+```{r}
+med_model_FutureNegotiation_lie_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 1, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_FutureNegotiation_lie_palter)) # prints summary of mediation analysis
+```
+
+And finally, here is a summary of the model containing the honesty/paltering contrast:
+
+```{r}
+med_model_FutureNegotiation_honest_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
+
+print(summary(med_model_FutureNegotiation_honest_palter)) # prints summary of mediation analysis
+```
+
+Again, as you can see from these models, they all show significant indirect and direct effects, confirming the findings from the original mediation model showing that Buyer unethicality partially mediates the effect of condition on reported likelihood of engaging in a future negotiation with the Buyer.
+
+Finally, as another supplementary exploratory analysis, I conducted the same mediation analyses using the "lavaan" package, which allowed me to examine the mediation effect without having to look at the separate condition contrasts. 
+
+Below is the mediation model for trust in the Buyer:
+
+```{r, message = FALSE}
 # using lavaan package to conduct mediation analysis
 
 buyer_trust_model <- '
@@ -824,21 +894,48 @@ buyer_trust_model <- '
              indirect := a*b
              direct   := c
              total    := c + (a*b)
-'
+' # generates regression models for mediation analysis
+
 med_fit_buyer_trust <- sem(buyer_trust_model, data = mediation_data, se = "bootstrap")
-summary(med_fit_buyer_trust, standardized = TRUE)
+summary(med_fit_buyer_trust, standardized = TRUE) # generates mediation model
 
 parameterEstimates(med_fit_buyer_trust, boot.ci.type = "bca.simple", level = 0.95, ci = TRUE, standardized = FALSE) %>% 
-  kable()
+  kable() # creates table summary of mediation analysis
 ```
 
+And here is the model for likelihood of future negotiation:
+
+```{r, message = FALSE}
+# using lavaan package to conduct mediation analysis
+
+future_negotiation_model <- '
+              BuyerUnethicalityIndex ~ a*Condition
+              FutureNegotiation ~ b*BuyerUnethicalityIndex + c*Condition
+ 
+             indirect := a*b
+             direct   := c
+             total    := c + (a*b)
+' # generates regression models for mediation analysis
+
+med_fit_future_negotiation <- sem(future_negotiation_model, data = mediation_data, se = "bootstrap")
+summary(med_fit_buyer_trust, standardized = TRUE) # generates mediation model
+
+parameterEstimates(med_fit_future_negotiation, boot.ci.type = "bca.simple", level = 0.95, ci = TRUE, standardized = FALSE) %>% 
+  kable() # creates table summary of mediation analysis
+```
+
+Again, both of these models show significant direct and indirect effects, suggesting that Buyer unethicality partially mediates the effect of condition on 1) trust in the Buyer and 2) reported likelihood of engaging in a future negotiation with the Buyer.
 
 ## Discussion
 
 ### Summary of Replication Attempt
 
-Open the discussion section with a paragraph summarizing the primary result from the confirmatory analysis and the assessment of whether it replicated, partially replicated, or failed to replicate the original result.  
+To conclude, the key finding that individuals evaluate those who palter and those who lie by commission as being equally unethical was successfully replicated. In the original study, the contrast between the paltering and lying conditions in simple linear regression assessing the effect of condition on ratings of the unethicality of the Buyer indicated a non-significant p-value (p = .91); this p-value was also non-significant in the present replication (p = .37). This finding not only demontrates that participants view those who palter and lie as being equally unethical, but it also provides indirect support for the original authors' broader claim that judgments of those who palter give more weight to the intent to mislead rather than the truth value of the statement (which is reflected in palterers being judged as severely as those who outright lie). 
 
 ### Commentary
 
-Add open-ended commentary (if any) reflecting (a) insights from follow-up exploratory analysis, (b) assessment of the meaning of the replication (or not) - e.g., for a failure to replicate, are the differences between original and present study ones that definitely, plausibly, or are unlikely to have been moderators of the result, and (c) discussion of any objections or challenges raised by the current and original authors about the replication attempt.  None of these need to be long.
+Follow-up exploratory analysis  provide support the original authors' claim that, in a negotiation context, the negative reputational consequences of lying and paltering (i.e., being perceived as more unethical relative to those who are honest) are one reason why individuals trust liars and palterers less and report being less likely to engage in a future negotiation with them. Specifically, mediation analyses revealed that ratings of Buyer unethicality partially mediate the relationship between condition (honesty, lying, or paltering) and trust in the Buyer, as well as the relationship between condition and likelihood of engaging in a future negotiation with the Buyer. This suggests that the effect of whether one's negotiation partner is deceptive or honest on one's trust in that individual is driven, in part, by one's perceptions of how unethical that individual is; the same can be said for one's reported likelihood of engaging in a future negotiation with that individual.
+
+These findings, along with the findings from the confirmatory analysis, highlight the risks of engaging in paltering as a negotiation strategy. While paltering might seem less unethical than lying by commission from a first-person perspective (i.e., when making decisions about how one should proceed in a negotiation; Study 1, Rogers et al., 2017), the key finding replicated in the present report suggests that, if one's intent to mislead is discovered, one could be judged with the same severity as they would have been if they had lied. This has interesting implications for future work, which should examine how paltering is evaluated relative to lying in different contexts (e.g., in the moral domain).
+
+
