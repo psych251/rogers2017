@@ -24,7 +24,6 @@ Original paper: https://github.com/psych251/rogers2017/blob/master/original_pape
 
 Link to paradigm: https://stanforduniversity.qualtrics.com/jfe/form/SV_8iX8T8N6pXtSpmt
 
-Please note that parts of the report are not currently written in past tense, as some details are subject to change (e.g., planned sample size). However, once these details are finalized, I will go back through and change the tense accordingly.
 
 ### Justification
 
@@ -36,7 +35,7 @@ In Study 3, Rogers et al. (2017) asked adults to imagine that they were engaged 
 
 ### Challenges
 
-Because I am relatively new to R and Github, I think that one of the primary challenges will involve my gaining the required knowledge and skills necessary for handling data and carrying out data analyses. However, I am confident that, with the skills we are learning in class as well as my having a strong background in STATA (and perhaps more importantly, experience with using Google to troubleshoot issues in STATA), I think this will be an appropriately difficult challenge. From a data collection standpoint, I think it will be challenging to ensure that the sample size is not affected substantially by exclusions due to failed attention checks; however, by being thoughtful about survey design and crafting a clear MTurk HIT description, I think that this issue can be minimized. Finally, I think it might be a slight challenge to stay within budget, given the relatively high compensation rate used in the original study. However, I am going to try my best to use the same payment ($0.50 per participant) in order to maintain as much consistency with the original study as possible. 
+Because I was relatively new to R and Github at the beginning of this project, one of the primary challenges involved my gaining the required knowledge and skills necessary for handling data and carrying out data analyses. However, I was confident that, with the skills we were learning in class as well as my having a strong background in STATA (and perhaps more importantly, experience with using Google to troubleshoot issues in STATA), that this would be an appropriately difficult challenge. From a data collection standpoint, I thought it would be challenging to ensure that the sample size is not affected substantially by exclusions due to failed attention checks; however, by being thoughtful about survey design and crafting a clear MTurk HIT description, I thought this issue could be minimized. Finally, I thought it might be a slight challenge to stay within budget, given the relatively high compensation rate used in the original study. However, I tried my best to use the same payment ($0.50 per participant) in order to maintain as much consistency with the original study as possible. 
 
 ## Methods
 
@@ -46,15 +45,15 @@ Since effect sizes were not reported in the original paper, I calcuated the effe
 
 Condition means, variances, and sizes (n) were entered into WebPower's effect size calculator for a fixed-effects, omnibus, one-way ANOVA. The resulting effect size was f = 0.2526, which is equivalent to Cohen's d = 0.5052.
 
-Using an effect size of f = 0.2526, the sample size needed to achieve 80% power was calculated via G*Power. The calculated sample size was 156 participants. This is remarkably close to the sample size used in the original study (where N = 160). Given that running this study with 156 participants already exceeds the funds allotted to this project, the goal for the present replication will be to to recruit 156 participants. (While additional participants could be recruited in order to achieve greater power, this is not feasible within the budget constraints of the present project.)
+Using an effect size of f = 0.2526, the sample size needed to achieve 80% power was calculated via G*Power. The calculated sample size was 156 participants. This is remarkably close to the sample size used in the original study (where N = 160). Given that running this study with 156 participants already exceeded the funds allotted to this project, the goal for the present replication was to to recruit 156 participants. (While additional participants could have been recruited in order to achieve greater power, this was not feasible within the budget constraints of the present project.)
 
 ### Planned Sample
 
-The original study was carried out with 160 participants (who were paid $0.50 each) on Amazon Mechanical Turk. Participants (N = 156, as determined by a power analysis) will be recruited in the same manner. Only adults (ages 18 and older) living in the United States will be eligible to participate. 
+The original study was carried out with 160 participants (who were paid $0.50 each) on Amazon Mechanical Turk. Participants (N = 156, as determined by a power analysis) in the present replication were recruited in the same manner. Only adults (ages 18 and older) living in the United States were eligible to participate. 
 
-In the original study, participants who did not pass two initial attention check items (which comprised the first part of the survey and occurred prior to condition assignment) were directed to the end of the survey (it is unclear whether they received payment). Because class policy specifies that payment of participants is not contingent on their performance or completion of all survey questions, I plan to pay participants who begin the survey but fail the initial attention check items; however, consistent with the original study, I will redirect these participants to the end of the survey immediately after attention check failure. Therefore, they will not be assigned to condition and will not be included in the final sample. (In the original study, while 160 were recruited, 5 failed the attention check, leaving a total of 155 participants.)
+In the original study, participants who did not pass two initial attention check items (which comprised the first part of the survey and occurred prior to condition assignment) were directed to the end of the survey (it is unclear whether they received payment). Because class policy specifies that payment of participants is not contingent on their performance or completion of all survey questions, I planned to pay participants who began the survey but failed the initial attention check items; however, consistent with the original study, I planned to redirect these participants to the end of the survey immediately after attention check failure. Therefore, they would not be assigned to condition and would not be included in the final sample. (In the original study, while 160 were recruited, 5 failed the attention check, leaving a total of 155 participants.)
 
-I expect that the demographics of the sample recruited for replication will be extremely similar to that of the sample recruited for the original study (with perhaps some differences due to chance). The original sample was 39% female and had a mean age of 30 years (SD = 8.96 years).
+I expected that the demographics of the sample recruited for replication would be extremely similar to that of the sample recruited for the original study (with perhaps some differences due to chance). The original sample was 39% female and had a mean age of 30 years (SD = 8.96 years).
 
 ### Materials
 
@@ -116,7 +115,7 @@ Following the primary dependent measures, participants were asked for demographi
 
 #### Exclusion Criteria
 
-Per the original study, participants will be excluded if they fail either (or both) of the initial two attention check items. There are no other exclusion criteria.
+Per the original study, participants were excluded if they failed either (or both) of the initial two attention check items. There were no other exclusion criteria.
 
 #### Key Analysis of Interest
 
@@ -124,33 +123,34 @@ The key analysis of interest is the contrast representing the difference between
 
 The contrast respresented by the aforementioned standardized beta coefficient (and its corresponding p-value) was chosen as the key analysis of interest primarily because it tests a key hypothesis (and finding) of the original study (which is also a key claim made in the paper as a whole), namely, that individuals will evaluate someone who palters as negatively as someone who lies by commission in a negotiation context. If the p-value corresponding to this contrast is non-significant (p > .05), then this will be considered a successful replication of this finding, as this will indicate that participants rated negotiation partners who engaged in paltering and negotiation partners who lied by commission as equally unethical. This, in turn, will lend further support to the claim that individuals evaluate palterers (who make statements that, while intended to mislead, are technically true) as severely as those who lie by commission (who make statements that are untruthful).
 
-Simple standardized linear regressions were also used in the original study, with contrasts between conditions (represented by standardized beta coefficients and their corresponding p-values) used to indicate differences (or a lack thereof). By employing a condition contrast within a simple standardized linear regression model as my key analysis of interest, I will be able to directly compare my findings with those of the original authors.
+Simple standardized linear regressions were also used in the original study, with contrasts between conditions (represented by standardized beta coefficients and their corresponding p-values) used to indicate differences (or a lack thereof). By employing a condition contrast within a simple standardized linear regression model as my key analysis of interest, I was able to directly compare my findings with those of the original authors.
 
-As an additional note, while an ordinal regression might be considered more appropriate for data comprised of Likert scale ratings, it is common practice to treat such ratings as continuous (rather than ordinal) variables and enter them into a regression model accordingly. A simple linear regression, conducted for each ethicality index, the trust measure, as well as the likelihood of future negotiation measure, will allow me to determine the extent to which participants' ratings for each of these measures differed depending on whether the Buyer was honest, paltered, or lied by commission.
+As an additional note, while an ordinal regression might be considered more appropriate for data comprised of Likert scale ratings, it is common practice to treat such ratings as continuous (rather than ordinal) variables and enter them into a regression model accordingly. A simple linear regression, conducted for each ethicality index, the trust measure, as well as the likelihood of future negotiation measure, allowed me to determine the extent to which participants' ratings for each of these measures differed depending on whether the Buyer was honest, paltered, or lied by commission.
 
 #### Other Planned Analyses
 
-In addition to the simple standardized linear regression model that will contain the key analysis of interest, I plan to also run three simple linear regressions to assess the effect of condition on participants' ratings of the unethicality of the Buyer's answer (which, like the Buyer unethicality rating, will also be in the form of an "ethicality index" representing an average across three items assessing the extent to which they believe the Buyer is "unethical," "dishonest," and "immoral"), their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer. 
+In addition to the simple standardized linear regression model that will contain the key analysis of interest, I planned to run three simple linear regressions to assess the effect of condition on participants' ratings of the unethicality of the Buyer's answer (which, like the Buyer unethicality rating, will also be in the form of an "ethicality index" representing an average across three items assessing the extent to which they believe the Buyer is "unethical," "dishonest," and "immoral"), their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer. 
 
 ### Differences from Original Study
 
-There will be no forseeable differences in the sample, with the exception of those due to chance, as I will be using the same recruitment pool utilized by the original authors (i.e., MTurk workers). The survey will be conducted via the same survey platform used in the original study (Qualtrics). 
+There were no forseeable differences in the sample, with the exception of those due to chance, as I used the same recruitment pool utilized by the original authors (i.e., MTurk workers). The survey was conducted via the same survey platform used in the original study (Qualtrics). 
 
-In addition, I will not collect demographic data on ethnicity, student status, and whether English is their first language. While these questions were asked of participants in the original study, the authors reported in their paper that these were not analyzed. Therefore, in the interest of keeping the survey as brief as possible, I chose to exclude these measures from the replication. I do not anticipate that this will affect the results of the replication, as these measures came at the end of the survey and would therefore have not had an effect on participants' responses to the key DVs of interest.
+In addition, I did not collect demographic data on ethnicity, student status, and whether English is their first language. While these questions were asked of participants in the original study, the authors reported in their paper that these were not analyzed. Therefore, in the interest of keeping the survey as brief as possible, I chose to exclude these measures from the replication. I did not anticipate that this will affect the results of the replication, as these measures came at the end of the survey and would therefore have not had an effect on participants' responses to the key DVs of interest.
 
-In addition, while participants will be  asked to rate the extent to which they found the Buyer's answer "creative," "innovative," or "original," the effect of condition on these ratings will not be analyzed. The original paper did not report analyses on these ratings; however, I chose to include them in the procedure because they preceded key measures assessing trust and likelihood of negotiating with the same Buyer again. It is possible that having to consider aspects of the Buyer's answer, such as its "creativity," may have influenced responses on these other measures in the original study. Therefore, I decided to retain the measures in the survey (even though the results will not be analyzed) in order to maintain a faithful replication.
+In addition, while participants were  asked to rate the extent to which they found the Buyer's answer "creative," "innovative," or "original," the effect of condition on these ratings were not analyzed. The original paper did not report analyses on these ratings; however, I chose to include them in the procedure because they preceded key measures assessing trust and likelihood of negotiating with the same Buyer again. It is possible that having to consider aspects of the Buyer's answer, such as its "creativity," may have influenced responses on these other measures in the original study. Therefore, I decided to retain the measures in the survey (even though the results will not be analyzed) in order to maintain a faithful replication.
 
 Finally, a 15-second delay on the appearance of the 'next' button (that allows participants to proceed through the survey) was added to the page containing the main scenario text. Although the original authors did not specify whether this was done in the original study (either in the paper or in their materials), I decided that adding a short delay (15 seconds) would be useful, particularly for discouraging inattentiveness to the text. One potential concern I had with adding the delay is that it might force anyone who reads the scenario quickly to consider this information longer than they normally would have -- however, after timing myself reading the text several times, I found that it takes at least 30 seconds to read at a quick pace. Therefore, it seems unlikely that the delay could have generated meaningful differences between participants that could influence the results. (The delay should have also been short enough that it wasn't frustrating to participants, who, with a longer delay, might have found it cumbersome to wait until they could proceed with the survey.)
 
 ### Methods Addendum (Post Data Collection)
 
-<!-- You can comment this section out prior to final report with data collection. -->
-
 #### Actual Sample
+
+As planned in the original 
 <!-- Sample size, demographics, data exclusions based on rules spelled out in analysis plan -->
 
 #### Differences from pre-data collection methods plan
-<!-- Any differences from what was described as the original plan, or “none”. --> 
+
+There were no differences from the pre-data collection methods plan.
 
 
 ## Results
@@ -167,7 +167,6 @@ Participants' ratings of the extent to which the Buyer's answer, as well as the 
 
 #### Load Relevant Libraries and Functions
 
-library(tidyverse)
 library(knitr)
 library(car)
 library(lm.beta)
@@ -175,6 +174,7 @@ library(cowplot)
 library(ggthemes)
 library(mediation)
 library(lavaan)
+library(tidyverse)
 
 #### Import data
 
@@ -247,13 +247,32 @@ ans_ethicality_lm_data <- data_with_ans_unethicality_index %>%
 
 ### Confirmatory analysis
 
-The analyses as specified in the analysis plan. A simple linear regression will be conducted in order to determine the effect of condition (if any) on participants' ratings of the Buyer's ethicality. Additional (non-key) linear regressions will assess the effect of condition on participants' ratings of the ethicality of the Buyer's answer, their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.
+The analyses were run as specified in the analysis plan. A simple linear regression was conducted in order to determine the effect of condition (if any) on participants' ratings of the Buyer's ethicality. Additional (non-key) linear regressions were also run to assess the effect of condition on participants' ratings of the ethicality of the Buyer's answer, their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer.
 
-Please note that the confirmatory analysis code has not been included in this report, but can be found in the code in the Project Report R Markdown file in the 'rogers2017' folder on GitHub.
-
-Below are simple linear regression models, which examine the relationship between condition and each of the primary DVs. I have used the 'lm.beta' package to obtain standardized regression coefficients, which were reported in the original paper. I have included three regression models per DV, with each of the three models having a different condition as the reference (or comparison) group. This was necessary in order to examine all possible contrasts between conditions.
+Below are simple linear regression models, which examine the relationship between condition and each of the primary DVs. I used the 'lm.beta' package to obtain standardized regression coefficients, which were reported in the original paper. I have included three regression models per DV, with each of the three models having a different condition as the reference (or comparison) group. This was necessary in order to examine all possible contrasts between conditions. Finally, prior to each model, I have provided a table with relevant descriptive statistics.
 
 #### Buyer Ethicality Ratings
+
+Below is a table containing descriptive statistics for Buyer unethicality.
+
+```{r}
+
+buyer_unethicality_condition_ns <- data_with_buyer_unethicality_index %>% 
+  filter(Buyer_Unethical_Question == 1) %>% 
+  group_by(Condition) %>%
+  tally()
+
+buyer_unethicality_means <- data_with_buyer_unethicality_index %>%
+  filter(Buyer_Unethical_Question == 1) %>% 
+  group_by(Condition) %>%
+  summarise(buyer_unethicality_mean = mean(BuyerUnethicalityIndex),
+            buyer_unethicality_SD = sd(BuyerUnethicalityIndex)) %>% 
+  mutate(buyer_unethicality_ns = buyer_unethicality_condition_ns$n,
+         buyer_unethicality_SE = buyer_unethicality_SD/sqrt(buyer_unethicality_ns)) # creates data frame with condition means, standard devations, standard errors, and Ns for the buyer unethicality index
+
+buyer_unethicality_means %>% 
+  kable() # generates table
+```
 
 Here is a summary of the effect of condition on ratings of the Buyer's ethicality, with the "Lie" condition as the reference group:
 
@@ -306,6 +325,26 @@ print(buyer_unethicality_model_PalterRef_standardized)
 
 #### Ratings of the Ethicality of the Buyer's Answer
 
+Below is a table containing descriptive statistics for unethicality of the Buyer's answer.
+
+```{r}
+answer_unethicality_condition_ns <- data_with_ans_unethicality_index %>% 
+  filter(Ans_Unethical_Question == 1) %>% 
+  group_by(Condition) %>%
+  tally()
+
+answer_unethicality_means <- data_with_ans_unethicality_index %>%
+  filter(Ans_Unethical_Question == 1) %>% 
+  group_by(Condition) %>%
+  summarise(answer_unethicality_mean = mean(AnsUnethicalityIndex),
+            answer_unethicality_SD = sd(AnsUnethicalityIndex)) %>% 
+ mutate(answer_unethicality_ns = answer_unethicality_condition_ns$n,
+        answer_unethicality_SE = answer_unethicality_SD/sqrt(answer_unethicality_ns))  # creates data frame with condition means, standard devations, standard errors, and Ns for the answer unethicality index
+
+answer_unethicality_means %>% 
+  kable() # generates table
+```
+
 Here is a summary of the effect of condition on ratings the ethicality of the Buyer's answer, with the "Lie" condition as the reference group:
 
 ```{r}
@@ -355,6 +394,26 @@ print(ans_unethicality_model_PalterRef_standardized)
 ```
 
 #### Ratings of Trust in Buyer
+
+Below is a table containing descriptive statistics for trust in the Buyer.
+
+```{r}
+buyer_trust_data$Condition <- relevel(buyer_trust_data$Condition, ref = "Honest") # changes reference group to Honest condition
+
+buyer_trust_condition_ns <- buyer_trust_data %>% 
+  group_by(Condition) %>%
+  tally()
+
+buyer_trust_means <- buyer_trust_data %>%
+  group_by(Condition) %>%
+  summarise(BuyerTrust_mean = mean(BuyerTrust),
+           BuyerTrust_SD = sd(BuyerTrust)) %>% 
+ mutate(BuyerTrust_ns = buyer_trust_condition_ns$n,
+        BuyerTrust_SE = BuyerTrust_SD/sqrt(BuyerTrust_ns)) # creates data frame with condition means, standard devations, standard errors, and Ns for Buyer trust
+
+buyer_trust_means %>% 
+  kable() # generates table
+```
 
 Here is a summary of the effect of condition on ratings of trust in the Buyer, with the "Lie" condition as the reference group:
 
@@ -406,6 +465,26 @@ print(BuyerTrust_model_PalterRef_standardized)
 
 #### Ratings of Likelihood of Engaging in Future Negotiation with Buyer
 
+Below is a table containing descriptive statistics for likelihood of engaging in a future negotiation with the Buyer.
+
+```{r}
+future_negotiation_data$Condition <- relevel(future_negotiation_data$Condition, ref = "Honest") # changes reference group to Honest condition
+
+future_negotiation_condition_ns <- future_negotiation_data %>% 
+  group_by(Condition) %>%
+  tally()
+
+future_negotiation_means <- future_negotiation_data %>%
+  group_by(Condition) %>%
+  summarise(FutureNegotiation_mean = mean(FutureNegotiation),
+            FutureNegotiation_SD = sd(FutureNegotiation)) %>% 
+ mutate(FutureNegotiation_ns = future_negotiation_condition_ns$n,
+        FutureNegotiation_SE = FutureNegotiation_SD/sqrt(FutureNegotiation_ns)) # creates data frame with condition means, standard devations, standard errors, and Ns for future negotiation
+
+future_negotiation_means %>% 
+  kable() # generates table
+```
+
 Here is a summary of the effect of condition on participants' ratings of their likelihood of engaging in a future negotiation with the Buyer, with the "Lie" condition as the reference group:
 
 ```{r}
@@ -455,71 +534,11 @@ Future_Negotiation_model_PalterRef_standardized <- summary(lm.beta(Future_Negoti
 print(Future_Negotiation_model_PalterRef_standardized)
 ```
 
-```{r}
+#### Side-by-Side Plots
 
-# Means and SDs of replication data (needed for plots)
-
-buyer_unethicality_condition_ns <- data_with_buyer_unethicality_index %>% 
-  filter(Buyer_Unethical_Question == 1) %>% 
-  group_by(Condition) %>%
-  tally()
-
-buyer_unethicality_means <- data_with_buyer_unethicality_index %>%
-  filter(Buyer_Unethical_Question == 1) %>% 
-  group_by(Condition) %>%
-  summarise(buyer_unethicality_mean = mean(BuyerUnethicalityIndex),
-            buyer_unethicality_SD = sd(BuyerUnethicalityIndex)) %>% 
-  mutate(buyer_unethicality_ns = buyer_unethicality_condition_ns$n,
-         buyer_unethicality_SE = buyer_unethicality_SD/sqrt(buyer_unethicality_ns)) # creates data frame with condition means, standard devations, standard errors, and Ns for the buyer unethicality index
-```
+To compare the findings from the present replication to the findings from the original study, side-by-side plots were generated.
 
 ```{r}
-answer_unethicality_condition_ns <- data_with_ans_unethicality_index %>% 
-  filter(Ans_Unethical_Question == 1) %>% 
-  group_by(Condition) %>%
-  tally()
-
-answer_unethicality_means <- data_with_ans_unethicality_index %>%
-  filter(Ans_Unethical_Question == 1) %>% 
-  group_by(Condition) %>%
-  summarise(answer_unethicality_mean = mean(AnsUnethicalityIndex),
-            answer_unethicality_SD = sd(AnsUnethicalityIndex)) %>% 
- mutate(answer_unethicality_ns = answer_unethicality_condition_ns$n,
-        answer_unethicality_SE = answer_unethicality_SD/sqrt(answer_unethicality_ns))
-```
-
-```{r}
-buyer_trust_data$Condition <- relevel(buyer_trust_data$Condition, ref = "Honest") # changes reference group to Honest condition
-
-buyer_trust_condition_ns <- buyer_trust_data %>% 
-  group_by(Condition) %>%
-  tally()
-
-buyer_trust_means <- buyer_trust_data %>%
-  group_by(Condition) %>%
-  summarise(BuyerTrust_mean = mean(BuyerTrust),
-           BuyerTrust_SD = sd(BuyerTrust)) %>% 
- mutate(BuyerTrust_ns = buyer_trust_condition_ns$n,
-        BuyerTrust_SE = BuyerTrust_SD/sqrt(BuyerTrust_ns))
-```
-
-```{r}
-future_negotiation_data$Condition <- relevel(future_negotiation_data$Condition, ref = "Honest") # changes reference group to Honest condition
-
-future_negotiation_condition_ns <- future_negotiation_data %>% 
-  group_by(Condition) %>%
-  tally()
-
-future_negotiation_means <- future_negotiation_data %>%
-  group_by(Condition) %>%
-  summarise(FutureNegotiation_mean = mean(FutureNegotiation),
-            FutureNegotiation_SD = sd(FutureNegotiation)) %>% 
- mutate(FutureNegotiation_ns = future_negotiation_condition_ns$n,
-        FutureNegotiation_SE = FutureNegotiation_SD/sqrt(FutureNegotiation_ns))
-```
-
-```{r}
-
 # plots based on replication data
 
 mydata_buyer_unethicality_plot <- ggplot(buyer_unethicality_means, aes(x=Condition, y=buyer_unethicality_mean, fill=Condition)) +
@@ -576,7 +595,6 @@ original_paper_data <- original_paper_data %>%
 ```
 
 ```{r}
-
 # plots based on data from original study (taken from means and SDs reported in Table 2 of Rogers et al., 2017)
 
 originaldata_buyer_unethicality_plot <- ggplot(original_paper_data, aes(x=Condition, y=Buyer_Unethicality_Mean, fill=Condition)) +
@@ -622,8 +640,6 @@ originaldata_FutureNegotiation_plot <- ggplot(original_paper_data, aes(x=Conditi
   theme_few() +
     theme(panel.border = element_blank(), axis.title.x = element_blank()) # plot of condition means for ratings of likelihood of engaging in a future negotiation with the Buyer
 ```
-
-#### Side-by-Side Plots
 
 Below are side-by-side plots showing the group means and SEs from the replication data (Plot "A") and the group means and SEs from the original data (Plot "B").
 
@@ -762,7 +778,7 @@ set.seed(123) # using set seed for reproducibility (since mediation analysis inv
 
 Using the "mediate" function from the "mediation" package (Tingley et al., 2019), I first created a model assessing the extent to which ratings of Buyer unethicality mediate the effect of condition on ratings of trust in the Buyer. Please note that, for all models I have generated using the "mediate" function, I have used the default number of simulations (1000) and the nonparametric bootstrap type. 
 
-```{r}
+```{r, message = FALSE}
 # using mediation package to conduct mediation analysis for trust in Buyer
 
 model_m <- lm(BuyerUnethicalityIndex ~ Condition, data = mediation_data) # regresses the mediator (Buyer unethicality) on the independent variable (Condition)
@@ -776,21 +792,22 @@ The summary below shows the summary of the mediation model for trust in the Buye
 
 Both the indirect and direct effects are significant, suggesting partial mediation of Buyer unethicality on the relationship between condition and trust in the Buyer. This is consistent with the authors' claim that at least part of the reason why participants trust the Buyer less when they palter or lie (vs. when they are honest) is due to their perceiving the Buyer as more unethical.
 
-```{r}
+```{r, message = FALSE}
 print(summary(med_model_BuyerTrust)) # prints summary of mediation analysis
 ```
 
 The plot below depicts the results summarized above. The 95% bias-corrected confidence intervals for the indirect effect (ACME) and the direct-effect (ADE) do not contain zero, providing support for partial mediation.
 
-```{r}
-print(plot(med_model_BuyerTrust, 
+```{r, message = FALSE}
+print(plot(med_model_BuyerTrust,
+           main = "Mediation Model for Trust in Buyer",
            xlim = c(-1.5, .5),
            xlab = "Estimate (95% CIs)")) # generates plot with point estimates, 95% CIs, and p-values for the ACME (average causal mediation effect), ADE (average direct effect), and total effect
 ```
 
 I then created a model assessing the extent to which ratings of Buyer unethicality mediate the effect of condition on ratings of the likelihood of engaging in a future negotiation with the Buyer.
 
-```{r}
+```{r, message = FALSE}
 # using mediation package to conduct mediation analysis for likelihood of future negotiation
 
 model_y_future_negotiation <- lm(FutureNegotiation ~ BuyerUnethicalityIndex + Condition, data = mediation_data) # regresses the outcome variable (FutureNegotiation) on both the mediator (Buyer unethicality) and the independent variable (Condition)
@@ -802,14 +819,15 @@ The summary below shows the summary of the mediation model for likelihood of eng
 
 As with the mediation model for trust in the Buyer, the indirect and direct effects are significant, suggesting partial mediation of Buyer unethicality on the relationship between condition and likelihood of engaging in a future negotiation with the Buyer. This is again consistent with the authors' claim; that is, at least part of the reason why participants report being less likely to engage in a future negotiation with the Buyer when they palter or lie (vs. when they are honest) is due to their perceiving the Buyer as more unethical.
 
-```{r}
+```{r, message = FALSE}
 print(summary(med_model_FutureNegotiation)) # prints summary of mediation analysis
 ```
 
 The plot below depicts the results summarized above. Again, the 95% bias-corrected confidence intervals for the indirect effect (ACME) and the direct-effect (ADE) do not contain zero, providing support for partial mediation.
 
-```{r}
+```{r, message = FALSE}
 print(plot(med_model_FutureNegotiation,
+           main = "Mediation Model for Future Negotiation",
            xlim = c(-1, 0.5),
            xlab = "Estimate (95% CIs)")) # generates plot with point estimates, 95% CIs, and p-values for the ACME (average causal mediation effect), ADE (average direct effect), and total effect
 ```
@@ -824,7 +842,7 @@ It is important to note that the mediation models below, like the ones described
 
 Beginning with the effect of condition on trust in the Buyer, here is a summary of the mediation model containing the honesty/lying contrast:
 
-```{r}
+```{r, message = FALSE}
 # using mediation package again, but this time including specific condition contrasts
 
 med_model_BuyerTrust_honest_lie <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 1, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
@@ -834,7 +852,7 @@ print(summary(med_model_BuyerTrust_honest_lie)) # prints summary of mediation an
 
 And here is a summary of the model containing the lying/paltering contrast:
 
-```{r}
+```{r, message = FALSE}
 med_model_BuyerTrust_lie_palter <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 1, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
 print(summary(med_model_BuyerTrust_lie_palter)) # prints summary of mediation analysis
@@ -842,7 +860,7 @@ print(summary(med_model_BuyerTrust_lie_palter)) # prints summary of mediation an
 
 And finally, here is a summary of the model containing the honesty/paltering contrast:
 
-```{r}
+```{r, message = FALSE}
 med_model_BuyerTrust_honest_palter <- mediate(model_m, model_y_trust, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
 print(summary(med_model_BuyerTrust_honest_palter)) # prints summary of mediation analysis
@@ -854,7 +872,7 @@ The models below examine the same condition contrasts, but instead examine the e
 
 First, here is a summary of the mediation model containing the honesty/lying contrast:
 
-```{r}
+```{r, message = FALSE}
 # using mediation package again, but this time including specific condition contrasts
 
 med_model_FutureNegotiation_honest_lie <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 1, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
@@ -864,7 +882,7 @@ print(summary(med_model_FutureNegotiation_honest_lie)) # prints summary of media
 
 And here is a summary of the model containing the lying/paltering contrast:
 
-```{r}
+```{r, message = FALSE}
 med_model_FutureNegotiation_lie_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 1, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
 print(summary(med_model_FutureNegotiation_lie_palter)) # prints summary of mediation analysis
@@ -872,7 +890,7 @@ print(summary(med_model_FutureNegotiation_lie_palter)) # prints summary of media
 
 And finally, here is a summary of the model containing the honesty/paltering contrast:
 
-```{r}
+```{r, message = FALSE}
 med_model_FutureNegotiation_honest_palter <- mediate(model_m, model_y_future_negotiation, treat = "Condition", mediator = "BuyerUnethicalityIndex", control.value = 0, treat.value = 2, boot = TRUE, sims = 1000) # gives contrast between 'honest' and 'lie' conditions
 
 print(summary(med_model_FutureNegotiation_honest_palter)) # prints summary of mediation analysis
@@ -896,8 +914,7 @@ buyer_trust_model <- '
              total    := c + (a*b)
 ' # generates regression models for mediation analysis
 
-med_fit_buyer_trust <- sem(buyer_trust_model, data = mediation_data, se = "bootstrap")
-summary(med_fit_buyer_trust, standardized = TRUE) # generates mediation model
+med_fit_buyer_trust <- sem(buyer_trust_model, data = mediation_data, se = "bootstrap") # generates mediation model
 
 parameterEstimates(med_fit_buyer_trust, boot.ci.type = "bca.simple", level = 0.95, ci = TRUE, standardized = FALSE) %>% 
   kable() # creates table summary of mediation analysis
@@ -917,8 +934,7 @@ future_negotiation_model <- '
              total    := c + (a*b)
 ' # generates regression models for mediation analysis
 
-med_fit_future_negotiation <- sem(future_negotiation_model, data = mediation_data, se = "bootstrap")
-summary(med_fit_buyer_trust, standardized = TRUE) # generates mediation model
+med_fit_future_negotiation <- sem(future_negotiation_model, data = mediation_data, se = "bootstrap") # generates mediation model
 
 parameterEstimates(med_fit_future_negotiation, boot.ci.type = "bca.simple", level = 0.95, ci = TRUE, standardized = FALSE) %>% 
   kable() # creates table summary of mediation analysis
