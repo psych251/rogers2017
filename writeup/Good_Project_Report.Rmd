@@ -129,7 +129,7 @@ As an additional note, while an ordinal regression might be considered more appr
 
 #### Other Planned Analyses
 
-In addition to the simple standardized linear regression model that will contain the key analysis of interest, I planned to run three simple linear regressions to assess the effect of condition on participants' ratings of the unethicality of the Buyer's answer (which, like the Buyer unethicality rating, will also be in the form of an "ethicality index" representing an average across three items assessing the extent to which they believe the Buyer is "unethical," "dishonest," and "immoral"), their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer. 
+In addition to the simple standardized linear regression model that contains the key analysis of interest, I planned to run three simple linear regressions to assess the effect of condition on participants' ratings of the unethicality of the Buyer's answer (which, like the Buyer unethicality rating, is also in the form of an "ethicality index" representing an average across three items assessing the extent to which they believe the Buyer is "unethical," "dishonest," and "immoral"), their trust in the Buyer, and their likelihood of engaging in a future negotiation with the Buyer. 
 
 ### Differences from Original Study
 
@@ -145,8 +145,7 @@ Finally, a 15-second delay on the appearance of the 'next' button (that allows p
 
 #### Actual Sample
 
-As planned in the original 
-<!-- Sample size, demographics, data exclusions based on rules spelled out in analysis plan -->
+As planned, 156 participants were recruited and run via MTurk. 4 participants were excluded due to attention checks (which occurred prior to condition assignment), leaving 152 participants who were included in analyses. The demographics for this sample were very similar to those in the original study. Participants were 28% female with a mean age of 34 years (SD = 9.48 years). Participants were each paid 60 cents for their time; this payment was based on California minimum wage ($7.25/hour) and an estimated study duration of 5 minutes.
 
 #### Differences from pre-data collection methods plan
 
@@ -158,7 +157,7 @@ There were no differences from the pre-data collection methods plan.
 
 ### Data preparation
 
-Data preparation following the analysis plan. 
+Data were prepared following the analysis plan.
 
 Participants' ratings of the extent to which the Buyer's answer, as well as the Buyer themselves, was "unethical," "dishonest," and "immoral" will be averaged to create two "ethicality indexes." Participants' ratings of how "creative," "innovative," and "original" the Buyer's answer was will not be included in analyses.
 	
@@ -243,6 +242,30 @@ buyer_ethicality_lm_data <- data_with_buyer_unethicality_index %>%
 
 ans_ethicality_lm_data <- data_with_ans_unethicality_index %>% 
   filter(Ans_Unethical_Question == 1)
+```
+
+#### Sample Demographics
+
+Below are the sample demographics. As shown in the tables below (and mentioned in the post data collection addendum above), the sample was 28% female, with a mean age of 24 years (SD = 9.48 years).
+
+```{r}
+# assessing demographics
+
+gender_summary <- recoded_data %>% 
+  group_by(Gender) %>% 
+  summarise(n = length(Sub_ID)) %>% 
+              mutate(percentage = (n / sum(n))*100) # creates dataframe with percentage breakdown for gender of participants
+
+gender_summary %>% 
+  kable() # generates table
+              
+age_summary <- recoded_data %>% 
+  mutate(Age = as.numeric(as.character(Age))) %>% 
+  summarise(mean_age = mean(Age),
+            SD_age = sd(Age)) # creates dataframe with summary stats (mean and SD) for age of participants
+
+age_summary %>% 
+  kable() # generates table
 ```
 
 ### Confirmatory analysis
@@ -798,7 +821,7 @@ print(summary(med_model_BuyerTrust)) # prints summary of mediation analysis
 
 The plot below depicts the results summarized above. The 95% bias-corrected confidence intervals for the indirect effect (ACME) and the direct-effect (ADE) do not contain zero, providing support for partial mediation.
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning = FALSE, results = 'hide'}
 print(plot(med_model_BuyerTrust,
            main = "Mediation Model for Trust in Buyer",
            xlim = c(-1.5, .5),
@@ -825,7 +848,7 @@ print(summary(med_model_FutureNegotiation)) # prints summary of mediation analys
 
 The plot below depicts the results summarized above. Again, the 95% bias-corrected confidence intervals for the indirect effect (ACME) and the direct-effect (ADE) do not contain zero, providing support for partial mediation.
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning = FALSE, results = 'hide'}
 print(plot(med_model_FutureNegotiation,
            main = "Mediation Model for Future Negotiation",
            xlim = c(-1, 0.5),
@@ -902,7 +925,7 @@ Finally, as another supplementary exploratory analysis, I conducted the same med
 
 Below is the mediation model for trust in the Buyer:
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning = FALSE}
 # using lavaan package to conduct mediation analysis
 
 buyer_trust_model <- '
@@ -922,7 +945,7 @@ parameterEstimates(med_fit_buyer_trust, boot.ci.type = "bca.simple", level = 0.9
 
 And here is the model for likelihood of future negotiation:
 
-```{r, message = FALSE}
+```{r, message = FALSE, warning = FALSE}
 # using lavaan package to conduct mediation analysis
 
 future_negotiation_model <- '
@@ -946,7 +969,7 @@ Again, both of these models show significant direct and indirect effects, sugges
 
 ### Summary of Replication Attempt
 
-To conclude, the key finding that individuals evaluate those who palter and those who lie by commission as being equally unethical was successfully replicated. In the original study, the contrast between the paltering and lying conditions in simple linear regression assessing the effect of condition on ratings of the unethicality of the Buyer indicated a non-significant p-value (p = .91); this p-value was also non-significant in the present replication (p = .37). This finding not only demontrates that participants view those who palter and lie as being equally unethical, but it also provides indirect support for the original authors' broader claim that judgments of those who palter give more weight to the intent to mislead rather than the truth value of the statement (which is reflected in palterers being judged as severely as those who outright lie). 
+To conclude, the key finding that individuals evaluate those who palter and those who lie by commission as being equally unethical was successfully replicated. In the original study, the contrast between the paltering and lying conditions in simple linear regression assessing the effect of condition on ratings of the unethicality of the Buyer indicated a non-significant p-value (p = .91); this p-value was also non-significant in the present replication (p = .90). This finding not only demontrates that participants view those who palter and lie as being equally unethical, but it also provides indirect support for the original authors' broader claim that judgments of those who palter give more weight to the intent to mislead rather than the truth value of the statement (which is reflected in palterers being judged as severely as those who outright lie). 
 
 ### Commentary
 

@@ -4,7 +4,7 @@ username:
 account: rpubs
 server: rpubs.com
 hostUrl: rpubs.com
-appId: https://api.rpubs.com/api/v1/document/555832/338a010a151d447b883b6b1035b2eab9
-bundleId: https://api.rpubs.com/api/v1/document/555832/338a010a151d447b883b6b1035b2eab9
-url: http://rpubs.com/kagood/555832
-when: 1575353490.41615
+appId: https://api.rpubs.com/api/v1/document/559717/5748e46c84cd440ba42ca49ba36a993f
+bundleId: https://api.rpubs.com/api/v1/document/559717/5748e46c84cd440ba42ca49ba36a993f
+url: http://rpubs.com/publish/claim/559717/df22657930cd416b828cb254a85e2694
+when: 1576283724.39422
